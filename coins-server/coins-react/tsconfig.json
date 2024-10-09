@@ -1,0 +1,17 @@
+{
+    "compilerOptions": {
+      "target": "ES6",                        // ECMAScript 6로 컴파일
+      "module": "ESNext",                     // 최신 ES 모듈 사용
+      "jsx": "react-jsx",                     // 최신 React JSX 변환 사용
+      "strict": true,                         // 엄격한 타입 체크
+      "moduleResolution": "node",             // 모듈을 Node 방식으로 해석
+      "esModuleInterop": true,                // ES 모듈 호환성 설정
+      "skipLibCheck": true,                   // 라이브러리 타입 검사 건너뜀
+      "forceConsistentCasingInFileNames": true, // 파일 이름 대소문자 일관성 유지
+      "noEmit": true,
+      "allowImportingTsExtensions": true,
+    },
+    "include": ["src"],                       // src 폴더의 모든 파일을 포함
+    "exclude": ["node_modules"]               // node_modules 폴더는 제외
+  }
+  
