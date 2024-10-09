@@ -2,6 +2,8 @@ import React from 'react'
 import { FiSearch } from 'react-icons/fi'
 import { RxHamburgerMenu } from "react-icons/rx";
 import IconButton from './elements/IconButton';
+import { Avatar } from '../ui/avatar';
+import UserIcon from './UserIcon';
 export const Header = () => {
   return (
     <header className='bg-neutral-700 flex flex-rox justify-between items-center h-[64px]  px-3'>
@@ -14,7 +16,11 @@ export const Header = () => {
           <div className='text-white cursor-pointer'><FiSearch size={24}/></div>
         </div>
       </article>
-      <article>프로필</article>
+      <article >
+        {/* user profile */}
+        <UserIcon></UserIcon>
+        
+      </article>
     </header>
   )
 }

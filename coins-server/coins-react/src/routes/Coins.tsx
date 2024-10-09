@@ -2,8 +2,8 @@ import React from 'react'
 
 const Coins = () => {
   return (
-    <div className='px-20px'>
-      
+    <div>
+      코인입니다
     </div>
   )
 }
