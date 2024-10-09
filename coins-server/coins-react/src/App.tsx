@@ -3,8 +3,9 @@ import Header from './components/Header.tsx';
 import Login from './routes/Login.tsx';
 function App() {
   return (
-  <div className='flex justify-center items-center'>
-    <Login></Login>
+  <div>
+    <Header></Header>
+    {/* <Login></Login> */}
   </div>
   );
 }
