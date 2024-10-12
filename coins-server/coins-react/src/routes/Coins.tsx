@@ -1,31 +1,60 @@
 import React, { useEffect, useState } from 'react'
 import axios from 'axios';
 
+interface CoinName{
+  market:string;
+  korean_name:string;
+  english_name:string
+}
+
+
+const Coin = ({coin}:{coin: CoinName}) =>{
+  return (
+    <>
+     <tr>
+      <td>{coin.market}</td>
+      <td>{coin.korean_name}</td>
+      <td>{coin.english_name}</td>
+     </tr> 
+    </>
+  )
+}
+
+
+
 const Coins = () => {
-  const [prices, setPrices] = useState([]);
+  const [prices, setPrices] = useState<CoinName[]>([]);
+  useEffect(()=>{
+    getCoinsName()
+    // console.log(prices)
 
-  useEffect(() => {
-    const fetchMarketPrices = async () => {
-      try {
-        const response = await axios.get('/api/market-prices');
-        setPrices(response.data); // 받아온 데이터로 상태 업데이트
-      } catch (error) {
-        console.error("Error fetching market prices:", error);
-      }
-    };
+    const socket = new WebSocket('ws//localhost:4000ㅌ')
 
-    fetchMarketPrices();
+    socket.onopen = ()=>{
+      console.log('노드 서버랑 연결')
+    }
 
-    // 2초마다 다시 호출 (옵션)
-    const intervalId = setInterval(fetchMarketPrices, 2000);
-    
-    // 정리 함수 반환 (컴포넌트가 언마운트 될 때 인터벌 클리어)
-    return () => clearInterval(intervalId);
-  }, []); // 의존성 배열 비어 있음: 컴포넌트가 마운트 될 때만 실행
+
+  }, [])
+  const getCoinsName = () =>{
+    axios.get('https://api.bithumb.com/v1/market/all').then(response => setPrices(response.data))
+  }
 
   return (
-    <div>
-      {prices}
+    <div className='flex justify-center items-center'>
+      <table>
+        <tr className='bg-black text-white'>
+          <th>코드</th>
+          <th>한국이름</th>
+          <th>영어이름</th>
+        </tr>
+      {
+      prices?.slice(0,100).map( coin => <Coin key={coin.market} coin={coin}></Coin>)
+      }
+      </table>
+    
+     
+     
     </div>
   )
 }
