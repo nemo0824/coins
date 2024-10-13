@@ -1,48 +1,72 @@
 import React, { useEffect, useState } from 'react';
 
-interface tickerPrice{
-    closePrice:number;
-    volume:number;
-    highPrice:number;
-    lowPrice:number;
+interface TickerPrice {
+  closePrice: number;
+  volume: number;
+  highPrice: number;
+  lowPrice: number;
+  symbol: string;
 }
 
-
 const Socket = () => {
-  const [tickerData, setTickerData] = useState<tickerPrice|null>(null);
+  const [tickerData, setTickerData] = useState<TickerPrice[]>([]); // 초기값을 빈 배열로 설정
 
   useEffect(() => {
-    // Bithumb WebSocket URL
-    const socket = new WebSocket('wss://pubwss.bithumb.com/pub/ws');
-    
-    // 웹소켓 연결 시 구독 메시지 전송
-    const subscribeMessage = JSON.stringify({
-      type: "ticker",
-      symbols: ["BTC_KRW"], // 예시로 BTC/KRW 티커를 구독
-      tickTypes: ["30M"]    // 30분 간격의 데이터 구독
-    });
+    // 공식 Public WebSocket URL 사용
+    const socket = new WebSocket('wss://ws-api.bithumb.com/websocket/v1');
 
-    // 웹소켓이 열릴 때 구독 요청 전송
+    // 구독 메시지 형식 (공식 문서에 따라)
+    const subscribeMessage = JSON.stringify([
+      { "ticket": "test example" },
+      { "type": "ticker", "codes": ["KRW-BTC", "KRW-ETH"] },
+      { "format": "DEFAULT" }
+    ]);
+
     socket.onopen = () => {
       console.log('WebSocket 연결이 열렸습니다.');
       socket.send(subscribeMessage);
     };
 
-    // 웹소켓을 통해 데이터가 수신되었을 때
     socket.onmessage = (event) => {
-      const data = JSON.parse(event.data);
-      if (data && data.content) {
-        console.log('수신된 데이터:', data);
-        setTickerData(data.content); // 수신된 티커 데이터를 state에 저장
-      }
+        // Blob 데이터를 텍스트로 변환
+        const reader = new FileReader();
+        reader.onload = () => {
+          const data = JSON.parse(reader.result); // 변환된 텍스트를 JSON으로 파싱
+          console.log('수신된 데이터:', data);
+      
+          if (data && data.ty === 'ticker') {
+            const newTicker: TickerPrice = {
+              closePrice: data.tp,
+              volume: data.tv,
+              highPrice: data.hp,
+              lowPrice: data.lp,
+              symbol: data.cd,
+            };
+      
+            setTickerData(prevData => {
+              const existingIndex = prevData.findIndex(ticker => ticker.symbol === newTicker.symbol);
+              if (existingIndex !== -1) {
+                const updatedData = [...prevData];
+                updatedData[existingIndex] = newTicker;
+                return updatedData;
+              } else {
+                return [...prevData, newTicker];
+              }
+            });
+          }
+        };
+        reader.readAsText(event.data); // Blob 데이터를 텍스트로 읽기
+      };
+      
+
+    socket.onerror = (error) => {
+      console.error('WebSocket 오류:', error);
     };
 
-    // 웹소켓이 닫힐 때
     socket.onclose = () => {
       console.log('WebSocket 연결이 닫혔습니다.');
     };
 
-    // 컴포넌트가 unmount될 때 웹소켓 연결 해제
     return () => {
       socket.close();
     };
@@ -51,13 +75,29 @@ const Socket = () => {
   return (
     <div>
       <h1>Bithumb 실시간 티커 데이터</h1>
-      {tickerData ? (
-        <div>
-          <p>현재가: {tickerData.closePrice} KRW</p>
-          <p>거래량: {tickerData.volume}</p>
-          <p>최고가: {tickerData.highPrice}</p>
-          <p>최저가: {tickerData.lowPrice}</p>
-        </div>
+      {tickerData.length > 0 ? (
+        <table>
+          <thead>
+            <tr>
+              <th>심볼</th>
+              <th>현재가</th>
+              <th>거래량</th>
+              <th>최고가</th>
+              <th>최저가</th>
+            </tr>
+          </thead>
+          <tbody>
+            {tickerData.map(ticker => (
+              <tr key={ticker.symbol}>
+                <td>{ticker.symbol}</td>
+                <td>{ticker.closePrice} KRW</td>
+                <td>{ticker.volume}</td>
+                <td>{ticker.highPrice}</td>
+                <td>{ticker.lowPrice}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
       ) : (
         <p>데이터를 불러오는 중...</p>
       )}
