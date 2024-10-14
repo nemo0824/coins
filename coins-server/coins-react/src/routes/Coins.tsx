@@ -8,41 +8,38 @@ interface CoinName{
 }
 
 
-const Coin = ({coin}:{coin: CoinName}) =>{
-  return (
-    <>
-     <tr>
-      <td>{coin.market}</td>
-      <td>{coin.korean_name}</td>
-      <td>{coin.english_name}</td>
-     </tr> 
-    </>
-  )
-}
+
 
 
 
 const Coins = () => {
-  const [prices, setPrices] = useState<CoinName[]>([]);
+  const [coinName, setCoinName] = useState<string>("");
   useEffect(()=>{
-    getCoinsName()
+    getCoinInitial()
+    getCoinName()
     // console.log(prices)
 
-    const socket = new WebSocket('ws//localhost:4000ㅌ')
-
-    socket.onopen = ()=>{
-      console.log('노드 서버랑 연결')
-    }
+    
 
 
   }, [])
-  const getCoinsName = () =>{
-    axios.get('https://api.bithumb.com/v1/market/all').then(response => setPrices(response.data))
+  // 코인 이름 가져오기
+  const getCoinName = ()=>{
+    axios.get("https://api.bithumb.com/v1/market/all")
+    .then(response => setCoinName(response.data.map((coin:CoinName) => coin.market)))
   }
 
+  // 코인 초기 렌더링을 위해 첫 api 요청
+  const getCoinInitial = () =>{  
+    axios.get(`https://api.bithumb.com/v1/ticker?markets=${[...coinName]}`)
+      .then(response => console.log("초기값",response.data))
+      .catch(err => console.error(err));
+  }
+  console.log("coinName",coinName)
+  
   return (
     <div className='flex justify-center items-center'>
-      <table>
+      {/* <table>
         <tr className='bg-black text-white'>
           <th>코드</th>
           <th>한국이름</th>
@@ -51,7 +48,7 @@ const Coins = () => {
       {
       prices?.slice(0,100).map( coin => <Coin key={coin.market} coin={coin}></Coin>)
       }
-      </table>
+      </table> */}
     
      
      
