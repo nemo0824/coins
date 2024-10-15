@@ -2,9 +2,14 @@
 module.exports = {
   content: [
     "./src/**/*.{js,jsx,ts,tsx}",
+    "./src/styles/global.css",
   ],
   theme: {
-    extend: {},
+    extend: {
+     colors:{
+     
+     },
+    },
   },
   plugins: [],
 }
