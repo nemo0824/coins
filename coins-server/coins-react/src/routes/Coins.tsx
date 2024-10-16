@@ -9,8 +9,7 @@ interface TickerPrice {
     signedChangeRate: number; // 부호가 있는 변화율
     signedChangePrice: number; // 부호가 있는 변화액
     change: string; // 변화 상태
-    code: string;
-   
+    code: string;  
 }
 interface ICoinName{
     market:string;
@@ -26,7 +25,7 @@ const Coins = () => {
   const [tickerData, setTickerData] = useState<TickerPrice[]>([]); // 초기값을 빈 배열로 설정
   const [coinName, setCoinName] = useState<string[]>([])
   const [coinNames, setCoinNames] = useState<ICoinNames[]>([])
-  const [useKoreanName, setUseKoreanName] = useState(true);
+  const [isKoreanName, setIsKoreanName] = useState(true);
 const setupWebSocket = ()=>{
  // 소켓 연결 
  const socket = new WebSocket('wss://ws-api.bithumb.com/websocket/v1');
@@ -139,17 +138,17 @@ const setupWebSocket = ()=>{
   }
 
   const handleNameChange = () => {
-    setUseKoreanName(prev => !prev); 
+    setIsKoreanName(prev => !prev); 
   }
   
 
   return (
     <div className='flex justify-center items-center bg-[#0A0A0B] w-full'>
-       <button onClick={handleNameChange}>ㄴㄴ이름바꾸기</button>
-       <table className='max-w-[550px]'>
+      
+       <table className='w-full max-w-[600px] table-fixed '>
         <thead>
           <tr className='text-[#FAFAF9]'>
-            <th>이름</th>
+            <th><button onClick={handleNameChange} className='bg-pink-500'>이름바꾸기</button></th>
             <th>현재가</th>
             <th>전일대비</th>
             <th>거래대금</th>
@@ -163,7 +162,7 @@ const setupWebSocket = ()=>{
           <CoinRow 
             key={coin.code} 
             {...coin}
-            displayName={useKoreanName ? coinInfo?.korean_name ?? '' : coinInfo?.english_name ?? coin.code}
+            displayName={isKoreanName ? coinInfo?.korean_name ?? '' : coinInfo?.english_name ?? coin.code}
             />
         
         )}
