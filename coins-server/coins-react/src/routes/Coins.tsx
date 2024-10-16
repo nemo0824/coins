@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import CoinRow from '../components/CoinRow';
+import { response } from 'express';
 
 interface TickerPrice {
     tradePrice: number; // 현재가
@@ -15,10 +16,17 @@ interface ICoinName{
     market:string;
 }
 
+interface ICoinNames{
+  market:string;
+  english_name:string;
+  korean_name:string;
+}
+
 const Coins = () => {
   const [tickerData, setTickerData] = useState<TickerPrice[]>([]); // 초기값을 빈 배열로 설정
   const [coinName, setCoinName] = useState<string[]>([])
-
+  const [coinNames, setCoinNames] = useState<ICoinNames[]>([])
+  const [useKoreanName, setUseKoreanName] = useState(true);
 const setupWebSocket = ()=>{
  // 소켓 연결 
  const socket = new WebSocket('wss://ws-api.bithumb.com/websocket/v1');
@@ -90,11 +98,13 @@ const setupWebSocket = ()=>{
    socket.close();
  };
 }
+
   useEffect(()=>{
     const fetchData = async()=>{
         await getCoinsName() 
       }
     fetchData()
+    getNameChange()
   },[])
 
 
@@ -114,33 +124,52 @@ const setupWebSocket = ()=>{
     .then(response => setCoinName(response.data.map(coin=> coin.market)))
   }
 
-//  첫 렌더링 이슈로 먼저 http api 통신을통해서 초기값가져오기
+
+  // 첫 렌더링 이슈로 먼저 http api 통신을통해서 초기값가져오기
   const getCoinInitial = async() =>{  
     axios.get(`https://api.bithumb.com/v1/ticker?markets=${[...coinName]}`)
       .then(response => console.log("초기값",response.data))
       .catch(err => console.error(err));
   }
 
+  const getNameChange = ()=>{
+    axios.get('https://api.bithumb.com/v1/market/all')
+    .then(response => setCoinNames(response.data))
+    .catch(err => console.error(err));
+  }
+
+  const handleNameChange = () => {
+    setUseKoreanName(prev => !prev); 
+  }
+  
 
   return (
-    <div className='flex justify-center items-center bg-[#0A0A0B]'>
-       <table>
-    <thead>
-      <tr className='text-[#FAFAF9]'>
-        <th>이름</th>
-        <th>현재가</th>
-        <th>전일대비</th>
-        <th>거래대금</th>
-      </tr>
-    </thead>
-    <tbody>
-      {tickerData.map((coin) => (
-       <CoinRow key={coin.code} {...coin}/>
-      ))}
-    </tbody>
-  </table>
+    <div className='flex justify-center items-center bg-[#0A0A0B] w-full'>
+       <button onClick={handleNameChange}>ㄴㄴ이름바꾸기</button>
+       <table className='max-w-[550px]'>
+        <thead>
+          <tr className='text-[#FAFAF9]'>
+            <th>이름</th>
+            <th>현재가</th>
+            <th>전일대비</th>
+            <th>거래대금</th>
+           
+          </tr>
+        </thead>
+        <tbody>
+          {tickerData.map((coin) => {
+            const coinInfo = coinNames.find(v => v.market === coin.code)
+          return(
+          <CoinRow 
+            key={coin.code} 
+            {...coin}
+            displayName={useKoreanName ? coinInfo?.korean_name ?? '' : coinInfo?.english_name ?? coin.code}
+            />
         
-      
+        )}
+          )}
+        </tbody>
+        </table>
     </div>
 
   );
