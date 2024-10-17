@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import CoinRow from '../components/CoinRow';
 import { response } from 'express';
+import { useSearchParams } from 'react-router-dom';
+import useSearchState from '../lib/store';
 
 interface TickerPrice {
     tradePrice: number; // 현재가
@@ -27,6 +29,7 @@ const Coins = () => {
   const [coinNames, setCoinNames] = useState<ICoinNames[]>([])
   const [isKoreanName, setIsKoreanName] = useState(true);
   const [isDes, setIsDes] = useState(false);
+  const {searchTerm, setSearchTerm} = useSearchState()
 const setupWebSocket = ()=>{
  // 소켓 연결 
  const socket = new WebSocket('wss://ws-api.bithumb.com/websocket/v1');
@@ -151,6 +154,21 @@ const setupWebSocket = ()=>{
     })
     setIsDes(prev => !prev)
   }
+
+  const filteredData = searchTerm
+        ? tickerData.filter(coin => 
+          coinNames.some(coinInfo => {
+            const isMatchingMarket = coinInfo.market === coin.code;
+    
+            const nameToCheck = isKoreanName ? coinInfo.korean_name : coinInfo.english_name;
+
+            return isMatchingMarket && nameToCheck.toLowerCase().includes(searchTerm.toLowerCase());
+        })
+        )
+        : tickerData; // 검색어가 없으면 원본 데이터
+
+  const noResultsMessage = filteredData.length === 0 && searchTerm ? "검색 결과가 없습니다." : null;
+
   
 
   return (
@@ -167,17 +185,17 @@ const setupWebSocket = ()=>{
           </tr>
         </thead>
         <tbody>
-          {tickerData.map((coin) => {
-            const coinInfo = coinNames.find(v => v.market === coin.code)
-          return(
-          <CoinRow 
-            key={coin.code} 
-            {...coin}
-            displayName={isKoreanName ? coinInfo?.korean_name ?? '' : coinInfo?.english_name ?? coin.code}
-            />
-        
-        )}
-          )}
+        {noResultsMessage && <h3 className='text-[#FAFAF9]'>{noResultsMessage}</h3>}
+        {filteredData.map((coin) => {
+                        const coinInfo = coinNames.find(v => v.market === coin.code);
+                        return (
+                            <CoinRow 
+                                key={coin.code} 
+                                {...coin}
+                                displayName={isKoreanName ? coinInfo?.korean_name ?? '' : coinInfo?.english_name ?? coin.code}
+                            />
+                        );
+                    })}
         </tbody>
         </table>
     </div>
