@@ -28,7 +28,9 @@ const Coins = () => {
   const [coinName, setCoinName] = useState<string[]>([])
   const [coinNames, setCoinNames] = useState<ICoinNames[]>([])
   const [isKoreanName, setIsKoreanName] = useState(true);
-  const [isDes, setIsDes] = useState(false);
+  const [isPriceDes, setIsPriceDes] = useState(false);
+  const [isDayDes, setIsDayDes] = useState(false)
+  const [isDayTradeDes, setIsDayTradeDes] = useState(false)
   const {searchTerm, setSearchTerm} = useSearchState()
 const setupWebSocket = ()=>{
  // 소켓 연결 
@@ -140,21 +142,47 @@ const setupWebSocket = ()=>{
     .then(response => setCoinNames(response.data))
     .catch(err => console.error(err));
   }
-
+  //영문 이름 한글 이름
   const handleNameChange = () => {
     setIsKoreanName(prev => !prev); 
   }
-
+  // 현재가 내림차순, 오름차순
   const handleSortPrice = ()=>{
     setTickerData(prev => { 
       const sortedData = [...prev].sort((a, b) => 
-        isDes ? a.tradePrice - b.tradePrice : b.tradePrice - a.tradePrice
+        isPriceDes ? a.tradePrice - b.tradePrice : b.tradePrice - a.tradePrice
       );
       return sortedData
     })
-    setIsDes(prev => !prev)
+    setIsPriceDes(prev => !prev)
+  }
+  // 전일대비 내림차순 , 오름차순
+  const handleSortDay = () =>{
+    setTickerData(prev => {
+      const sortedData = [...prev].sort((a,b)=> 
+        isDayDes ? a.signedChangeRate - b.signedChangeRate : b.signedChangeRate - a.signedChangeRate
+        
+      )
+      return sortedData
+    })
+    setIsDayDes(prev => !prev)
   }
 
+    // 전일대비 내림차순 , 오름차순
+    const handleTradePrice = () =>{
+      setTickerData(prev => {
+        const sortedData = [...prev].sort((a,b)=> 
+          isDayTradeDes ? a.accTradePrice24h - b.accTradePrice24h : b.accTradePrice24h - a.accTradePrice24h
+          
+        )
+        return sortedData
+      })
+      setIsDayTradeDes(prev => !prev)
+    }
+
+
+
+  // 검색 로직 
   const filteredData = searchTerm
         ? tickerData.filter(coin => 
           coinNames.some(coinInfo => {
@@ -177,10 +205,10 @@ const setupWebSocket = ()=>{
        <table className='w-full max-w-[600px] table-fixed '>
         <thead>
           <tr className='text-[#FAFAF9]'>
-            <th><button onClick={handleNameChange} className='bg-pink-500'>이름바꾸기</button></th>
-            <th><button onClick={handleSortPrice}>현재가</button></th>
-            <th>전일대비</th>
-            <th>거래대금</th>
+            <th onClick={handleNameChange} className='cursor-pointer'>한/영</th>
+            <th onClick={handleSortPrice} className='cursor-pointer'>현재가</th>
+            <th onClick={handleSortDay} className='cursor-pointer'>전일대비</th>
+            <th onClick={handleTradePrice} className='cursor-pointer'>거래대금</th>
            
           </tr>
         </thead>
