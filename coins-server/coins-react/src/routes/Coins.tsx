@@ -180,20 +180,18 @@ const setupWebSocket = ()=>{
       setIsDayTradeDes(prev => !prev)
     }
 
+    // 이름과 원래 tickeData 결합하는  리팩토링 즉 새로운 객체 모든 코인정보를 담고있는
+    const combinedData = tickerData.map(coin =>{
+      const coinNameInfo = coinNames.find(v=> v.market === coin.code)
+      return{
+        ...coin,
+        displayName: isKoreanName ? coinNameInfo?.korean_name : coinNameInfo?.english_name
+      }
+    })
 
+    // 검색로직 분리 유지보수성을위해서
+    const filteredData = searchTerm ? combinedData.filter(coin => coin.displayName?.toLocaleLowerCase().includes(searchTerm.toLocaleLowerCase())) : combinedData
 
-  // 검색 로직 
-  const filteredData = searchTerm
-        ? tickerData.filter(coin => 
-          coinNames.some(coinInfo => {
-            const isMatchingMarket = coinInfo.market === coin.code;
-    
-            const nameToCheck = isKoreanName ? coinInfo.korean_name : coinInfo.english_name;
-
-            return isMatchingMarket && nameToCheck.toLowerCase().includes(searchTerm.toLowerCase());
-        })
-        )
-        : tickerData; // 검색어가 없으면 원본 데이터
 
   const noResultsMessage = filteredData.length === 0 && searchTerm ? "검색 결과가 없습니다." : null;
 
@@ -215,12 +213,10 @@ const setupWebSocket = ()=>{
         <tbody>
         {noResultsMessage && <h3 className='text-[#FAFAF9]'>{noResultsMessage}</h3>}
         {filteredData.map((coin) => {
-                        const coinInfo = coinNames.find(v => v.market === coin.code);
                         return (
                             <CoinRow 
                                 key={coin.code} 
                                 {...coin}
-                                displayName={isKoreanName ? coinInfo?.korean_name ?? '' : coinInfo?.english_name ?? coin.code}
                             />
                         );
                     })}
