@@ -1,8 +1,10 @@
 import React from 'react'
-
+import { CoinChart } from './CoinChart'
 const CoinDetail = () => {
   return (
-    <div>CoinDetail</div>
+    <div>
+      <CoinChart></CoinChart>
+    </div>
   )
 }
 

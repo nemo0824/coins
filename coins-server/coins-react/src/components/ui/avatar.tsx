@@ -1,6 +1,6 @@
 // src/components/ui/avatar.tsx
 import * as React from "react"
-import {cn} from "../lib/utils"
+import {cn} from "../../lib/utils"
 
 export function Avatar({ className="", ...props }: React.HTMLAttributes<HTMLDivElement>) {
   return (

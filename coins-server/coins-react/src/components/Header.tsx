@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import SearchBar from "./SearchBar"
 import { RxHamburgerMenu } from "react-icons/rx";
 import IconButton from './elements/IconButton';
-import { Avatar } from '../ui/avatar';
+import { Avatar } from './ui/avatar';
 import UserIcon from './UserIcon';
 
 export const Header = () => {
