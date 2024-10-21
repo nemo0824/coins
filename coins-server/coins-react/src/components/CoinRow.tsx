@@ -26,7 +26,9 @@ const CoinRow = ({ tradePrice, accTradePrice24h, signedChangeRate,displayName, s
      const navigate = useNavigate()
     //  detail 페이지로 이동
      const handleRowClick = ()=>{
-        navigate(`/coin/${code}`)
+        navigate(`/coin/${code}`,{
+           state: {displayName}
+        })
      }
   return (
     <tr key={code} className='text-[#FAFAF9] border-b-[1px] border-b-[rgb(41, 37, 36)] w-full cursor-pointer' onClick={handleRowClick}> 
