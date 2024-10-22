@@ -10,7 +10,7 @@ export const Header = () => {
  
 
   return (
-    <header className='bg-neutral-700 flex flex-rox justify-between items-center h-[64px]  px-3'>
+    <header className='bg-neutral-700 flex flex-rox justify-between items-center h-[64px]  px-3 gap-2'>
       <article className='flex flex-row items-center'>
         <IconButton icon={<RxHamburgerMenu size={26}></RxHamburgerMenu>} ></IconButton>
       </article>

@@ -200,7 +200,7 @@ const setupWebSocket = ()=>{
   return (
     <div className='flex justify-center items-center bg-[#0A0A0B] w-full'>
       
-       <table className='w-full max-w-[600px] table-fixed '>
+       <table className='w-full max-w-[500px] table-fixed '>
         <thead>
           <tr className='text-[#FAFAF9]'>
             <th onClick={handleNameChange} className='cursor-pointer'>한/영</th>
