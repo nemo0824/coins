@@ -4,7 +4,7 @@ import Login from './routes/Login.tsx';
 import Router from './Router.tsx';
 function App() {
   return (
-  <div className='bg-[#0A0A0B] min-h-screen'>
+  <div className='bg-[#0A0A0B] w-screen h-screen overflow-x-hidden '>
     <Header></Header>
     <Router></Router>
     {/* <Login></Login> */}
