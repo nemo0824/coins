@@ -2,7 +2,7 @@ import { link } from 'fs'
 import React from 'react'
 
 const Login = () => {
-  const REST_API_KEY = "";
+  const REST_API_KEY = "5da42ff639c1452b6e9ab669e8c7a96a";
   const REDIRECT_URI = "http://localhost:3000/";
   const link = `https://kauth.kakao.com/oauth/authorize?client_id=${REST_API_KEY}&redirect_uri=${REDIRECT_URI}&response_type=code`
 

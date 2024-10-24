@@ -41,7 +41,17 @@ app.get('*', (req, res)=>{
   res.sendFile(path.join(__dirname, 'coins-react/build/index.html'))
 });
 
+require('dotenv').config();
 
+// 
+app.get('/api/auth/kakao-login', (req, res) => {
+  const REST_API_KEY = process.env.KAKAO_REST_API_KEY; // 환경 변수에서 불러옴
+  const REDIRECT_URI = 'http://localhost:3000/';
+  
+  const kakaoAuthUrl = `https://kauth.kakao.com/oauth/authorize?client_id=${REST_API_KEY}&redirect_uri=${REDIRECT_URI}&response_type=code`;
+
+  res.json({ kakaoAuthUrl });
+});
 
 
 
