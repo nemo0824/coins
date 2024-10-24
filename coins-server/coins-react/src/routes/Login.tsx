@@ -1,15 +1,18 @@
+import axios from 'axios';
+import { response } from 'express';
 import { link } from 'fs'
-import React from 'react'
+import React, { useState } from 'react'
 
 const Login = () => {
-  const REST_API_KEY = "5da42ff639c1452b6e9ab669e8c7a96a";
-  const REDIRECT_URI = "http://localhost:3000/";
-  const link = `https://kauth.kakao.com/oauth/authorize?client_id=${REST_API_KEY}&redirect_uri=${REDIRECT_URI}&response_type=code`
-
-
-  const loginHandler = () => {
-    window.location.href = link;
+  const [kakaoAuthUrl, setKakaoAuthUrl] = useState('')
+  const handleKakaoLogin = () => {
+    window.location.href = kakaoAuthUrl; // URL로 리디렉션
   };
+
+  const getKakaUrl = ()=>{
+    axios.get('http://localhost:8080/api/auth/kakao-login').then(response => setKakaoAuthUrl(response.data))
+    
+  }
   return (
     <section className='flex flex-col justify-center items-center min-w-screen min-h-screen overflow-y-hidden' >
       <div className='relative h-full min-w-[550px] w-full'>
@@ -27,7 +30,7 @@ const Login = () => {
           <div className='flex flex-col justify-center gap-4'>
             <h1 className='text-white text-[30px] text-center'>Check Dreams</h1>
             <h1 className='text-white text-[30px] text-center'>Login</h1>
-            <div onClick={loginHandler}>
+            <div onClick={handleKakaoLogin}>
               <img src='/images/kakao_login_medium_wide.png' className='w-full cursor-pointer'></img>
             </div>
           </div>  
