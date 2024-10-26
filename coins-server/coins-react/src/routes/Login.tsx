@@ -1,18 +1,27 @@
 import axios from 'axios';
 import { response } from 'express';
 import { link } from 'fs'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 
 const Login = () => {
   const [kakaoAuthUrl, setKakaoAuthUrl] = useState('')
   const handleKakaoLogin = () => {
-    window.location.href = kakaoAuthUrl; // URL로 리디렉션
-  };
+    if(kakaoAuthUrl){
+      window.location.href = kakaoAuthUrl; // URL로 리디렉션
+  
+    }
+      };
+  const getKakaoUrl = async()=>{
+   const response = await axios.get('http://localhost:8080/api/auth/kakao-login')
+   setKakaoAuthUrl(response.data.kakaoAuthUrl)
 
-  const getKakaUrl = ()=>{
-    axios.get('http://localhost:8080/api/auth/kakao-login').then(response => setKakaoAuthUrl(response.data))
-    
+   
   }
+  
+  useEffect(()=>{
+    console.log("useEffect called")
+    getKakaoUrl()
+  },[])
   return (
     <section className='flex flex-col justify-center items-center min-w-screen min-h-screen overflow-y-hidden' >
       <div className='relative h-full min-w-[550px] w-full'>
