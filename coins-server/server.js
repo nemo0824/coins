@@ -32,22 +32,22 @@ new MongoClient(url).connect().then((client)=>{
   console.log(err);
 });
 
-// 
+// Cors 설정 미들웨어 사용 localhost:5173에서만 호출할수있도록
 app.use(cors({
-  origin: 'http://localhost:5173',  // React 앱이 실행 중인 도메인 허용
+  origin: 'http://localhost:5173',  
   methods: ['GET', 'POST'],
 }));
 
-// 카카오 로그인 url 주기
+// 카카오 로그인 URL 프론트 단에서 주소를 전달하면 보안성이 떨어지기때문에 express에서 env파일을 통해서 URL전달
 app.get('/api/auth/kakao-login', (req, res) => {
-  const REST_API_KEY = process.env.KAKAO_REST_API_KEY; // 환경 변수에서 불러옴
+  const REST_API_KEY = process.env.KAKAO_REST_API_KEY; 
   const REDIRECT_URI = 'http://localhost:5173/redirect';
   const kakaoAuthUrl = `https://kauth.kakao.com/oauth/authorize?client_id=${REST_API_KEY}&redirect_uri=${REDIRECT_URI}&response_type=code&scope=profile_nickname,profile_image`;
 
   res.json({ kakaoAuthUrl });
 });
 
-
+// 프론트단에서 받아온 accCode로 token 요청
 app.post('/api/auth/kakao-token', async (req, res) => {
   const { code } = req.body;
 
@@ -68,15 +68,17 @@ app.post('/api/auth/kakao-token', async (req, res) => {
     const accessToken = response.data.access_token;
     res.json({ accessToken });
   } catch (error) {
-    console.error('Kakao 로그인 처리 중 오류 발생:', error);
+    console.error('토큰 요청 중 오류 발생:', error.response ? error.response.data : error.message);
     res.status(500).json({ error: '로그인 처리 중 오류가 발생했습니다.' });
   }
 });
 
+// 받아온 카카오유저 정보 전달
 app.post('/api/auth/kakao-user', async (req, res) => {
   const { accessToken } = req.body;
 
   try {
+    // Bearer 토큰방식 으로 엑세스토큰 전달
     const response = await axios.get('https://kapi.kakao.com/v2/user/me', {
       headers: {
         Authorization: `Bearer ${accessToken}`,

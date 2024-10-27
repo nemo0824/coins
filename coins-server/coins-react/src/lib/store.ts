@@ -9,6 +9,13 @@ export interface UserInfo{
     nickname:string;
     profileImage:string;
     setUser: (nickname: string, profileImage: string) => void;
+    clearUser: (nickname:string, profileImage:string) => void;
+    
+}
+
+interface UserLoginState {
+    isLogged: boolean;
+    setIsLogged: (loggedIn: boolean) => void;
 }
 
 
@@ -27,7 +34,7 @@ const storage: PersistStorage<UserInfo> = {
     return Promise.resolve();
   },
 };
-
+// Search 정보 관리
 const useSearchState = create<SearchState>((set) =>({
     searchTerm: '',
     setSearchTerm:(value:string)=>set({
@@ -35,12 +42,14 @@ const useSearchState = create<SearchState>((set) =>({
     })
 }))
 
+// user 정보 관리
 const useUserStore = create<UserInfo>()(
     persist<UserInfo>(
       (set) => ({
         nickname: '',
         profileImage: '',
         setUser: (nickname: string, profileImage: string) => set({ nickname, profileImage }),
+        clearUser: () => set({ nickname: '', profileImage: '' })
       }),
       {
         name: 'user-storage', // 로컬 스토리지에 저장될 이름
@@ -49,4 +58,9 @@ const useUserStore = create<UserInfo>()(
     )
   );
 
-export default {useSearchState, useUserStore};
+//  로그인 유무 정보 관리
+const useUserLogin = create<UserLoginState>((set)=>({
+    isLogged: false,
+    setIsLogged: (loggedIn:boolean) => set({ isLogged: loggedIn }),
+}))
+export default {useSearchState, useUserStore, useUserLogin};

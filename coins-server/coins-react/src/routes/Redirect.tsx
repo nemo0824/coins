@@ -11,17 +11,20 @@ const Redirect = () => {
     const authCode = queryParams.get('code');
     const navigate = useNavigate();
     const { setUser } = store.useUserStore();
+    // 로그인 처리 
+    const { setIsLogged } = store.useUserLogin();
+    
    
 
-      // 사용자 정보를 가져오는 함수
+// 유저정보를 가져오는 함수
   const getUserInfo = (accessToken:string) => {
     axios.post('http://localhost:8080/api/auth/kakao-user', { accessToken })
       .then(response => {
         const {nickname, profileImage} = response.data
-
         setUser(nickname, profileImage)
-
-        navigate('/'); // 예시: 로그인 성공 후 홈으로 이동
+        // 로그인 처리 true로 
+        setIsLogged(true)
+        navigate('/'); 
       })
       .catch(error => {
         console.error('사용자 정보 요청 중 오류 발생:', error);
@@ -51,10 +54,9 @@ const Redirect = () => {
         
         if (authCode) {
             getAccessToken()
-           
-        }    
-        if (token) {
-            getUserInfo(token); // 토큰을 사용해 유저 정보를 다시 불러옴
+        }else if (token) {
+            // 만약 로그인을 해본적있는사람은 access 토큰이있기때문에 유저정보를 다시불러오게
+            getUserInfo(token); 
         }
        
       }, [authCode]);
@@ -65,4 +67,4 @@ const Redirect = () => {
   )
 }
 
-export default Redirect
+export default Redirect 

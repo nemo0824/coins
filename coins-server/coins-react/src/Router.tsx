@@ -8,14 +8,14 @@ import Redirect from './routes/Redirect'
 
 const Router = () => {
   return (
-    <BrowserRouter>
+
      <Routes>
         <Route path='/' element={<Coins></Coins>}/>
         <Route path='/coin/:id' element={<CoinDetail></CoinDetail>}/>
         <Route path='/login' element={<Login></Login>}/>
         <Route path='/redirect' element={<Redirect></Redirect>}/>
      </Routes>
-    </BrowserRouter>
+    
     
   )
 }
