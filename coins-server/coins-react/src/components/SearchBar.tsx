@@ -1,9 +1,10 @@
 import React, { useState } from 'react'
 import { FiSearch } from 'react-icons/fi'
 import useSearchState from '../lib/store';
+import store from '../lib/store';
 
 const SearchBar = () => {
-  const { searchTerm, setSearchTerm } = useSearchState();
+  const { searchTerm, setSearchTerm } = store.useSearchState();
   return (
     <>
  

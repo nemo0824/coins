@@ -7,6 +7,7 @@ const methodOverride = require('method-override')
 const { MongoClient, ObjectId } = require('mongodb')
 const axios = require('axios');  // axios 패키지 추가
 const cors = require('cors');    // cors 패키지 추가
+const { userInfo } = require('os');
 
 
 // 기본 설정
@@ -41,15 +42,14 @@ app.use(cors({
 app.get('/api/auth/kakao-login', (req, res) => {
   const REST_API_KEY = process.env.KAKAO_REST_API_KEY; // 환경 변수에서 불러옴
   const REDIRECT_URI = 'http://localhost:3000/redirect';
-  const kakaoAuthUrl = `https://kauth.kakao.com/oauth/authorize?client_id=${REST_API_KEY}&redirect_uri=${REDIRECT_URI}&response_type=code`;
+  const kakaoAuthUrl = `https://kauth.kakao.com/oauth/authorize?client_id=${REST_API_KEY}&redirect_uri=${REDIRECT_URI}&response_type=code&scope=profile_nickname,profile_image`;
 
   res.json({ kakaoAuthUrl });
 });
 
 
-//  토큰 받아오는 로직
 app.post('/api/auth/kakao-token', async (req, res) => {
-  const { code } = req.body; 
+  const { code } = req.body;
 
   try {
     const REST_API_KEY = process.env.KAKAO_REST_API_KEY;
@@ -65,13 +65,36 @@ app.post('/api/auth/kakao-token', async (req, res) => {
       },
     });
 
-    const accessToken = response.data.access_token; // 액세스 토큰을 저장하거나 처리
-    res.json({ accessToken }); // 클라이언트에게 토큰 반환
+    const accessToken = response.data.access_token;
+    res.json({ accessToken });
   } catch (error) {
     console.error('Kakao 로그인 처리 중 오류 발생:', error);
     res.status(500).json({ error: '로그인 처리 중 오류가 발생했습니다.' });
   }
 });
+
+app.post('/api/auth/kakao-user', async (req, res) => {
+  const { accessToken } = req.body;
+
+  try {
+    const response = await axios.get('https://kapi.kakao.com/v2/user/me', {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    });
+
+    const userInfo = response.data;
+    console.log('kakao 유저정보', userInfo);
+    const nickname = userInfo.properties?.nickname || userInfo.kakao_account?.profile?.nickname;
+    const profileImage = userInfo.properties?.profile_image || userInfo.kakao_account?.profile?.profile_image_url;
+
+    res.json({ nickname, profileImage, userInfo });
+  } catch (error) {
+    console.error('Kakao 사용자 정보 요청 중 오류 발생:', error);
+    res.status(500).json({ error: '사용자 정보 요청 중 오류가 발생했습니다.' });
+  }
+});
+
 
 // 리액트 빌드 파일 연동
 app.use(express.static(path.join(__dirname, 'coins-react/build')));

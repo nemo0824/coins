@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import CoinRow from '../components/CoinRow';
+import store from '../lib/store';
 import { response } from 'express';
 import { useSearchParams } from 'react-router-dom';
 import useSearchState from '../lib/store';
@@ -31,7 +32,7 @@ const Coins = () => {
   const [isPriceDes, setIsPriceDes] = useState(false);
   const [isDayDes, setIsDayDes] = useState(false)
   const [isDayTradeDes, setIsDayTradeDes] = useState(false)
-  const {searchTerm, setSearchTerm} = useSearchState()
+  const {searchTerm, setSearchTerm} = store.useSearchState()
 const setupWebSocket = ()=>{
  // 소켓 연결 
  const socket = new WebSocket('wss://ws-api.bithumb.com/websocket/v1');
