@@ -34,14 +34,14 @@ new MongoClient(url).connect().then((client)=>{
 
 // 
 app.use(cors({
-  origin: 'http://localhost:3000',  // React 앱이 실행 중인 도메인 허용
+  origin: 'http://localhost:5173',  // React 앱이 실행 중인 도메인 허용
   methods: ['GET', 'POST'],
 }));
 
 // 카카오 로그인 url 주기
 app.get('/api/auth/kakao-login', (req, res) => {
   const REST_API_KEY = process.env.KAKAO_REST_API_KEY; // 환경 변수에서 불러옴
-  const REDIRECT_URI = 'http://localhost:3000/redirect';
+  const REDIRECT_URI = 'http://localhost:5173/redirect';
   const kakaoAuthUrl = `https://kauth.kakao.com/oauth/authorize?client_id=${REST_API_KEY}&redirect_uri=${REDIRECT_URI}&response_type=code&scope=profile_nickname,profile_image`;
 
   res.json({ kakaoAuthUrl });
@@ -53,7 +53,7 @@ app.post('/api/auth/kakao-token', async (req, res) => {
 
   try {
     const REST_API_KEY = process.env.KAKAO_REST_API_KEY;
-    const REDIRECT_URI = 'http://localhost:3000/redirect';
+    const REDIRECT_URI = 'http://localhost:5173/redirect';
 
     // 액세스 토큰 요청
     const response = await axios.post(`https://kauth.kakao.com/oauth/token`, null, {
