@@ -1,6 +1,6 @@
 {
     "compilerOptions": {
-      "target": "ES6",                        // ECMAScript 6로 컴파일
+      "target": "ESNext",                        
       "module": "ESNext",                     // 최신 ES 모듈 사용
       "jsx": "react-jsx",                     // 최신 React JSX 변환 사용
       "strict": true,                         // 엄격한 타입 체크

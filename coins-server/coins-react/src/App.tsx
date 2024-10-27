@@ -7,6 +7,7 @@ function App() {
   <div className='bg-[#0A0A0B] w-screen h-screen overflow-x-hidden '>
     <Header></Header>
     <Router></Router>
+      
     {/* <Login></Login> */}
   </div>
   );
