@@ -15,7 +15,7 @@ interface CoinPrice {
 
 
 
-const CoinRow = ({ tradePrice, accTradePrice24h, signedChangeRate,displayName, signedChangePrice, change, code }:CoinPrice) => {
+const CoinRow = ({ tradePrice, accTradePrice24h, signedChangeRate,displayName, change, code }:CoinPrice) => {
     // change에 따른 색상 변경
     const getChangeColor = () =>{
         if(change === "RISE") return 'text-red-500';

@@ -201,14 +201,14 @@ const setupWebSocket = ()=>{
   return (
     <div className='flex justify-center items-center bg-[#0A0A0B] w-full '>
      
-       <table className='w-full min-w-[600px] max-w-[550px] table-fixed  mt-3'>
+       <table className='min-w-[600px] max-w-[650px] table-fixed  mt-3'>
         <thead>
        
           <tr className='text-[#FAFAF9] border border-t-white-300 bg-stone-800'>
             <th onClick={handleNameChange} className='cursor-pointer text-left py-3 px-2'>한/영</th>
             <th onClick={handleSortPrice} className='cursor-pointer text-left py-3 px-2'>현재가</th>
             <th onClick={handleSortDay} className='cursor-pointer text-left py-3 px-2'>전일대비</th>
-            <th onClick={handleTradePrice} className='cursor-pointer text-left py-3 px-2'>거래대금</th>
+            <th onClick={handleTradePrice} className='cursor-pointer text-right py-3 px-2'>거래대금</th>
           </tr>
         </thead>
         <tbody>

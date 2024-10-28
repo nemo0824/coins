@@ -14,7 +14,7 @@ const { userInfo } = require('os');
 app.use(methodOverride('_method'))
 app.use(express.static(__dirname + '/public'))
 app.use(cors()); // 클라이언트에서 요청을 허용하도록 설정
-app.use(express.json())
+
 
 
 
@@ -37,7 +37,7 @@ app.use(cors({
   origin: 'http://localhost:5173',  
   methods: ['GET', 'POST'],
 }));
-
+app.use(express.json())
 // 카카오 로그인 URL 프론트 단에서 주소를 전달하면 보안성이 떨어지기때문에 express에서 env파일을 통해서 URL전달
 app.get('/api/auth/kakao-login', (req, res) => {
   const REST_API_KEY = process.env.KAKAO_REST_API_KEY; 
@@ -96,6 +96,18 @@ app.post('/api/auth/kakao-user', async (req, res) => {
     res.status(500).json({ error: '사용자 정보 요청 중 오류가 발생했습니다.' });
   }
 });
+
+// 게시글 리스트 조회
+app.get('/api/posts', async (req, res)=>{
+  try{
+   const posts = await db.collection('post').find().toArray();
+    res.json(posts);
+  }catch(error){
+    console.error('게시글 조회 오류', error);
+    res.status(500).json({message: '게시글 조회 실패'})
+  }
+})
+
 
 
 // 리액트 빌드 파일 연동
