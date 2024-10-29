@@ -9,7 +9,7 @@ const CoinDetail = () => {
     <div>
       <h3 className='text-white'>{displayName}</h3>
       <CoinChart></CoinChart>
-      <h3 className='text-white'>게시판</h3>
+      <h3 className='text-white'>{displayName} 게시판</h3>
       <Post></Post>
     </div>
   )

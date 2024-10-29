@@ -193,8 +193,7 @@ const setupWebSocket = ()=>{
     // 검색로직 분리 유지보수성을위해서
     const filteredData = searchTerm ? combinedData.filter(coin => coin.displayName?.toLocaleLowerCase().includes(searchTerm.toLocaleLowerCase())) : combinedData
 
-
-  const noResultsMessage = filteredData.length === 0 && searchTerm ? "검색 결과가 없습니다." : null;
+    const noResultsMessage = filteredData.length === 0 && searchTerm ? "검색 결과가 없습니다." : null;
 
   
 

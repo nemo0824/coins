@@ -3,7 +3,7 @@ import { useEffect } from 'react';
 import { useLocation, useNavigate} from 'react-router-dom';
 import axios from 'axios';
 import store from '../lib/store';
-import useUserStore from '../lib/store'
+
 const Redirect = () => {
    
     const location = useLocation();
