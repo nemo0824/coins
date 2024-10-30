@@ -13,7 +13,9 @@ interface Post {
     author: string;
 }
 
-const Post = () => {
+
+
+const Post = ({category}:{category:string}) => {
    
     const {isLogged} = store.useUserLogin()
     const [posts, setPosts] = useState<Post[]>([])
@@ -28,10 +30,19 @@ const Post = () => {
         getPostList()
       },[])
     
-    // 글쓰기 
+    // 로그인했을때만 글쓰기 
     const handleWrite = ()=>{
         // isLogged ? 
     }
+
+    // 게시글 썼을때
+    const handlePostSubmit= () =>{
+        getPostList()
+    }
+
+    const filteredPost = posts.filter(post => post.category === category)
+    console.log("넘겨받은 카테고리",category)
+  
   return (
     <section className='text-white w-full'>
        
@@ -42,15 +53,16 @@ const Post = () => {
                 <th className='cursor-pointer text-left py-2 px-2'>카테고리</th>
                 <th className='cursor-pointer text-left py-2 px-2'>제목</th>
                 <th className='cursor-pointer text-left py-2 px-2'>작성자</th>
+                <th className='cursor-pointer text-left py-2 px-2'>작성일</th>
             </tr>
             </thead>
             <tbody>
-                {posts.length === 0 ? (
+                {filteredPost.length === 0 ? (
                     <tr>
                         <td colSpan= {4}> 게시글이 없습니다</td>
                     </tr>
                 ):(
-                    posts.map((post,index) => (
+                    filteredPost.map((post,index) => (
                         <PostRow key={post._id} post={post} index={index+1}></PostRow>
                     ))
                 )
@@ -60,7 +72,7 @@ const Post = () => {
             </tbody>
         </table>
         <div className='flex justify-end mt-4'>
-        <PostDialog></PostDialog>
+        <PostDialog category={category} handlePostSubmit={handlePostSubmit}></PostDialog>
         </div>
     </section>
   )

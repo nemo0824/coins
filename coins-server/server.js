@@ -107,6 +107,31 @@ app.get('/api/posts', async (req, res)=>{
     res.status(500).json({message: '게시글 조회 실패'})
   }
 })
+// 게시글 작성
+app.post('/api/posts', async (req, res) => {
+  try {
+    
+    const { title, category, author, content } = req.body;
+
+    const newPost = {
+      title,
+      category,
+      author,
+      content,
+      createdAt: new Date(),
+    };
+
+    // MongoDB에 데이터 추가
+    const result = await db.collection('post').insertOne(newPost);
+
+    res.status(201).json({
+      message: '게시글 작성 성공'
+    });
+  } catch (error) {
+    console.error('게시글 작성 오류:', error);
+    res.status(500).json({ message: '게시글 작성 실패' });
+  }
+});
 
 
 
