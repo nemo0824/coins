@@ -133,6 +133,57 @@ app.post('/api/posts', async (req, res) => {
   }
 });
 
+// 게시글 수정
+app.put('/api/posts/:postId', async (req, res) => {
+  try {
+    const { postId } = req.params;
+    const { title, category, content, author } = req.body;
+
+    // 해당 게시글을 찾아서 업데이트
+    const result = await db.collection('post').updateOne(
+      { _id: new ObjectId(postId)}, // author와 일치하는 경우에만 수정
+      { $set: { title, category, content, updatedAt: new Date() } }
+    );
+
+    console.log('Updating post with ID:', postId);
+console.log('Request body:', req.body);
+
+    if (result.matchedCount === 0) {
+      return res.status(404).json({ message: '게시글이 없거나 수정 권한이 없습니다.' });
+    }
+
+    res.status(200).json({ message: '게시글 수정 성공' });
+  } catch (error) {
+    console.error('게시글 수정 오류:', error);
+    res.status(500).json({ message: '게시글 수정 실패' });
+  }
+});
+
+
+
+
+// 게시글 삭제
+app.delete('/api/posts/:postId', async (req, res) => {
+  try {
+    const { postId } = req.params;
+    
+
+    const result = await db.collection('post').deleteOne({
+      _id: new ObjectId(postId),
+    
+    });
+
+    if (result.deletedCount === 0) {
+      return res.status(404).json({ message: '게시글이 없거나 삭제 권한이 없습니다.' });
+    }
+
+    res.status(200).json({ message: '게시글 삭제 성공' });
+  } catch (error) {
+    console.error('게시글 삭제 오류:', error);
+    res.status(500).json({ message: '게시글 삭제 실패' });
+  }
+});
+
 
 
 // 리액트 빌드 파일 연동

@@ -10,14 +10,14 @@ const CoinDetail = () => {
   return (
     <div>
       <div className='p-6'>
-      <div className='mb-4'></div>
-      <h1 className='text-slate-100 text-[24px] flex items-center gap-3' ><IoBarChart></IoBarChart>{displayName} 차트</h1>
-      <div className='mb-4'></div>
-      <CoinChart></CoinChart>
-      <div className='mb-6'></div>
-      <h1 className='text-slate-100 text-[24px] flex items-center gap-3'><LuClipboardEdit></LuClipboardEdit>{displayName} 게시판</h1>
-      <div className='mb-4'></div>
-      <Post category={displayName}></Post>
+        <div className='mb-4'></div>
+        <h1 className='text-slate-100 text-[24px] font-bold flex items-center gap-3' ><IoBarChart></IoBarChart>{displayName} 차트</h1>
+        <div className='mb-4'></div>
+        <CoinChart></CoinChart>
+        <div className='mb-6'></div>
+        <h1 className='text-slate-100 text-[24px] font-bold flex items-center gap-3'><LuClipboardEdit></LuClipboardEdit>{displayName} 게시판</h1>
+        <div className='mb-4'></div>
+        <Post category={displayName}></Post>
       </div>
     </div>
   )

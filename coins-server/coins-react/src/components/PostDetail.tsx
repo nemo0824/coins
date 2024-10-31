@@ -1,27 +1,60 @@
-import React from 'react'
-import { useLocation, useParams } from 'react-router-dom'
+import React, { useState } from 'react'
+import { useLocation, useNavigate, useParams } from 'react-router-dom'
+import PostDialog from './PostDialog';
+import axios from 'axios';
 
 const PostDetail = () => {
     const params = useParams();
     console.log("params", params)
     const location = useLocation()
     const {post, index} = location.state
+    const [isEdit, setIsEdit] = useState(false)
+    const navigate = useNavigate();
+    console.log("포포포스트",post)
+
+    const handleDelete = async() =>{
+      try{
+        await axios.delete(`http://localhost:8080/api/posts/${params.postId}`);
+        alert("삭제 성공")
+        navigate(-1);
+      }catch(error){
+        console.error("게시글 삭제오류", error)
+        alert("삭제 실패")
+      }
+      
+    }
   return (
    
-    <section>
-      <nav className='bg-slate-500 flex flex-row text-white'>
-     
-        <div>{index}</div>
-        <div>{post.title}</div>
-        <div>{post.category}</div>
+    <section className='p-6' >
+        
+      <nav className='border-green-500 border-b-4 p-3 text-white '>
+
+        {/* <div>{index}</div> */}
+        <div className='text-[32px] font-bold text-green-500'>{post.category} 게시판</div>
+        <h1 className='text-[20px]'>{post.title}</h1>
+       
         <div>{post.author}</div>
         <div>{post.createAt}</div>
-        <div>{post.content}</div>
-       
       </nav>
-      <article>
-
+        
+      <article className='border-green-500 border-b-4 p-3 text-white min-h-[400px] overflow-y-auto'>
+        <div>{post.content}</div>
       </article>
+      <article className='flex flex-row justify-end text-white gap-3 mt-2'>
+        <button className='border border-white px-2' onClick={()=> setIsEdit(true)}>수정</button>
+        <button className='border border-white px-2'onClick={handleDelete} >삭제</button>
+      </article>
+      {isEdit && ( 
+        <PostDialog
+          category={post.category}
+          postData = {post}
+          isEdit={isEdit}
+          handlePostSubmit={()=>setIsEdit(false)}
+        />
+      )
+
+        
+      }
           
     </section>
 
