@@ -214,6 +214,10 @@ const setupWebSocket = ()=>{
         <tbody>
         {noResultsMessage && <h3 className='text-[#FAFAF9]'>{noResultsMessage}</h3>}
         {filteredData.map((coin) => {
+                         console.log(coin.tradePrice)
+                        //  비정상적인 거래대금, 현재값 이슈!!!@#!#!@#!#!#@
+                        if(coin.tradePrice <= 0.000001 || coin.accTradePrice24h === 0)return null;
+
                         return (
                             <CoinRow 
                                 key={coin.code} 
