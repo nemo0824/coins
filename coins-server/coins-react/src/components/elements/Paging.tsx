@@ -33,10 +33,10 @@ const Paging = ({ currentPage, totalPages, onPageChange }:PagingProps) => {
     <Pagination>
     <PaginationContent>
       <PaginationItem>
-        <PaginationPrevious onClick={handlePrevious} />
+        <PaginationPrevious onClick={handlePrevious} className='cursor-pointer'/>
       </PaginationItem>
       {Array.from({ length: totalPages }, (_, index) => (
-        <PaginationItem key={index + 1}>
+        <PaginationItem key={index + 1} className='cursor-pointer'>
           <PaginationLink
             onClick={() => onPageChange(index + 1)}
             className={currentPage === index + 1 ? 'active' : ''}
@@ -46,7 +46,7 @@ const Paging = ({ currentPage, totalPages, onPageChange }:PagingProps) => {
         </PaginationItem>
       ))}
       <PaginationItem>
-        <PaginationNext onClick={handleNext} />
+        <PaginationNext onClick={handleNext} className='cursor-pointer' />
       </PaginationItem>
     </PaginationContent>
   </Pagination>

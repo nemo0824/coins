@@ -49,6 +49,7 @@ const setupWebSocket = ()=>{
    socket.send(subscribeMessage);
  };
 
+// 중복되는거 확인*(****)
 
  // 소켓으로 수신
  socket.onmessage = (event) => {

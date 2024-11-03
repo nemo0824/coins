@@ -1,8 +1,9 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useLocation, useNavigate, useParams } from 'react-router-dom'
 import PostDialog from './PostDialog';
 import axios from 'axios';
-
+import {useUserLogin, useUserStore} from "../lib/store"
+import store from '../lib/store';
 const PostDetail = () => {
     const params = useParams();
     console.log("params", params)
@@ -10,6 +11,8 @@ const PostDetail = () => {
     const {post, index} = location.state
     const [isEdit, setIsEdit] = useState(false)
     const navigate = useNavigate();
+    const {isLogged} = store.useUserLogin()
+    const {nickname} = store.useUserStore()
     console.log("포포포스트",post)
 
     const handleDelete = async() =>{
@@ -23,6 +26,9 @@ const PostDetail = () => {
       }
       
     }
+    useEffect(()=>{
+      setIsEdit(true)
+    }, [])
   return (
    
     <section className='p-6' >
@@ -40,21 +46,21 @@ const PostDetail = () => {
       <article className='border-green-500 border-b-4 p-3 text-white min-h-[400px] overflow-y-auto'>
         <div>{post.content}</div>
       </article>
+      { isLogged && nickname === post.author &&(
       <article className='flex flex-row justify-end text-white gap-3 mt-2'>
-        <button className='border border-white px-2' onClick={()=> setIsEdit(true)}>수정</button>
-        <button className='border border-white px-2'onClick={handleDelete} >삭제</button>
-      </article>
-      {isEdit && ( 
-        <PostDialog
+       
+        <PostDialog 
+          onClick={()=> setIsEdit(true)}
           category={post.category}
           postData = {post}
-          isEdit={isEdit}
+          isEdit={true}
           handlePostSubmit={()=>setIsEdit(false)}
         />
-      )
-
-        
+        <button className='border border-white px-2 rounded-md'onClick={handleDelete} >삭제</button>
+      </article>
+       )
       }
+    
           
     </section>
 

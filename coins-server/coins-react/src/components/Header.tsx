@@ -21,7 +21,6 @@ export const Header = () => {
     setIsLogged(false)
     console.log('Is Logged false여야함', isLogged);
     navigate('/')
-    
   }
   // 로그인 페이지로 이동
   const handleLoginPage = ()=>{
@@ -59,7 +58,7 @@ export const Header = () => {
         <span className='text-white'>{nickname}님</span>
         : ''
         }
-        {isLogged ? <button onClick={handleLogout}>로그아웃</button> : <button onClick={handleLoginPage}>로그인</button>}
+        {isLogged ? <button className='text-blue-500' onClick={handleLogout}>Logout</button> : <button className='text-red-500' onClick={handleLoginPage}>LogIn</button>}
       </article>
     </header>
   )

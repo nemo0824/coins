@@ -2,9 +2,10 @@ import React from 'react'
 import PostRow from './PostRow'
 import { useState, useEffect } from 'react'
 import axios from 'axios'
-import store from '../lib/store'
+
 import PostDialog from './PostDialog'
 import Paging from './elements/Paging'
+
 
 interface Post {
     _id: string;
@@ -14,10 +15,11 @@ interface Post {
 }
 
 const Post = ({ category }: { category: string }) => {
-    const { isLogged } = store.useUserLogin();
+   
     const [posts, setPosts] = useState<Post[]>([]);
     const [currentPage, setCurrentPage] = useState(1);
     const postsPerPage = 5;
+
 
     // 게시글 가져오기
     const getPostList = async () => {
@@ -31,9 +33,7 @@ const Post = ({ category }: { category: string }) => {
     }, []);
 
     // 로그인했을때만 글쓰기 
-    const handleWrite = () => {
-        // isLogged ? 
-    }
+   
 
     // 게시글 썼을때 새로고침
     const handlePostSubmit = () => {
@@ -80,7 +80,7 @@ const Post = ({ category }: { category: string }) => {
                 </tbody>
             </table>
             <div className='flex justify-end mt-4'>
-                <PostDialog category={category} handlePostSubmit={handlePostSubmit} />
+                <PostDialog category={category} isEdit={false} handlePostSubmit={handlePostSubmit} />
             </div>
             <div>
                 <Paging

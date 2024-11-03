@@ -10,6 +10,7 @@ import {
 import store from '../lib/store';
 import axios from 'axios';
 import { FaPen } from "react-icons/fa";
+import { useNavigate } from 'react-router-dom';
 
 interface PropsPost{
     category:string;
@@ -23,12 +24,16 @@ interface PropsPost{
 }
 
 
+
+
 const PostDialog = ({category, handlePostSubmit, isEdit, postData}:PropsPost) => {
     const {nickname} = store.useUserStore()
     const [formData , setFormData] = useState({
         title:'',
         content:'',
     })
+    const { isLogged } = store.useUserLogin();
+    const navigate = useNavigate()
     const handleChange = (e:React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>{
         const {name, value} = e.target;
         setFormData({
@@ -38,12 +43,15 @@ const PostDialog = ({category, handlePostSubmit, isEdit, postData}:PropsPost) =>
     }
     const handleSubmit = async(e:React.FormEvent)=>{
      e.preventDefault();
+    
+     if(!formData.title.trim() || !formData.content.trim()){
+        alert("제목과 내용을 모두 입력해주세요")
+        return
+     }
+
      try{
-        // 수정할때
+        // 수정수정시
         if(isEdit){
-            console.log("아이디가 뭐야 언디파인드야?", postData?._id)
-            console.log(category, nickname)
-            console.log(formData)
             await axios.put(`http://localhost:8080/api/posts/${postData?._id}`,{
                 ...formData,
                 category,
@@ -53,8 +61,10 @@ const PostDialog = ({category, handlePostSubmit, isEdit, postData}:PropsPost) =>
             setFormData({ title: '', content: '' });
             handlePostSubmit()
             setOpen(false)
+         
+            
         }else{
-        //   작성할때 
+        //   작성할시
         await axios.post('http://localhost:8080/api/posts', {
          ...formData,
           category,
@@ -70,6 +80,19 @@ const PostDialog = ({category, handlePostSubmit, isEdit, postData}:PropsPost) =>
         alert("게시글 작성실패..")
      }
     }
+
+
+    // 글작성시 로그인했는지 확인 로그인페이지로 이동
+    const handleWriteOpenDialog = ()=>{
+        if(isLogged){
+            setOpen(true)
+        }else{
+            alert("로그인 페이지로 이동합니다")
+            navigate("/login")
+        }
+    }
+    
+
     useEffect(()=>{
         if(isEdit && postData){
             setFormData({
@@ -77,12 +100,13 @@ const PostDialog = ({category, handlePostSubmit, isEdit, postData}:PropsPost) =>
                 content : postData.content
             })
         }
+        // setOpen(isEdit)
     },[isEdit])
 
     const [open, setOpen] = useState(false);
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-  <DialogTrigger className='border border-white rounded-md p-2'>Open</DialogTrigger>
+  <DialogTrigger className='border border-white rounded-md px-2' onClick={handleWriteOpenDialog}>{isEdit ? "수정" : "글 작성"}</DialogTrigger>
   <DialogContent className='text-white h-[600px] min-w-[500px] rounded-lg bg-black'>
     <DialogHeader className='text-white'>
       <DialogTitle className='text-white flex gap-3'><FaPen></FaPen> {isEdit ? "게시글 수정" : "게시글 작성"}해주세요</DialogTitle>

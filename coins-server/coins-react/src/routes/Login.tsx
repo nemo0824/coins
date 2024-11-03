@@ -37,8 +37,8 @@ const Login = () => {
 
         <div className='z-20 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2'>
           <div className='flex flex-col justify-center gap-4'>
-            <h1 className='text-white text-[30px] text-center'>Check Dreams</h1>
-            <h1 className='text-white text-[30px] text-center'>Login</h1>
+            <h1 className='text-green-500 text-[36px] text-center font-bold'>Check Dreams</h1>
+            <h1 className='text-white text-[18px] text-center'>Login</h1>
             <div onClick={handleKakaoLogin}>
               <img src='/images/kakao_login_medium_wide.png' className='w-full cursor-pointer'></img>
             </div>
