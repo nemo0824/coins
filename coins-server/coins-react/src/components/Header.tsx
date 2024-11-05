@@ -55,10 +55,10 @@ export const Header = () => {
         <UserIcon profileImage={profileImage} nickname= {nickname}/>
         
         {profileImage && nickname ?
-        <span className='text-white'>{nickname}님</span>
+        <span className='text-white min-w-[60px]'>{nickname}님</span>
         : ''
         }
-        {isLogged ? <button className='text-blue-500' onClick={handleLogout}>Logout</button> : <button className='text-red-500' onClick={handleLoginPage}>LogIn</button>}
+        {isLogged ? <button className='text-blue-500 border-l border-l-1 border-slate-400 px-2' onClick={handleLogout}>Logout</button> : <button className='text-red-500' onClick={handleLoginPage}>LogIn</button>}
       </article>
     </header>
   )

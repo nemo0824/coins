@@ -4,20 +4,22 @@ import PostDialog from './PostDialog';
 import axios from 'axios';
 import {useUserLogin, useUserStore} from "../lib/store"
 import store from '../lib/store';
+import Comment from './Comment';
 const PostDetail = () => {
     const params = useParams();
     console.log("params", params)
+    const {postId} = params
     const location = useLocation()
     const {post, index} = location.state
     const [isEdit, setIsEdit] = useState(false)
     const navigate = useNavigate();
     const {isLogged} = store.useUserLogin()
     const {nickname} = store.useUserStore()
-    console.log("포포포스트",post)
+
 
     const handleDelete = async() =>{
       try{
-        await axios.delete(`http://localhost:8080/api/posts/${params.postId}`);
+        await axios.delete(`http://localhost:8080/api/posts/${postId}`);
         alert("삭제 성공")
         navigate(-1);
       }catch(error){
@@ -60,7 +62,9 @@ const PostDetail = () => {
       </article>
        )
       }
-    
+        <Comment 
+         postId={postId}
+        />
           
     </section>
 

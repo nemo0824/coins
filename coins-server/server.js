@@ -184,6 +184,44 @@ app.delete('/api/posts/:postId', async (req, res) => {
   }
 });
 
+// 댓글 작성
+app.post('/api/comments', async (req, res) => {
+  try {
+    const { postId, author, content } = req.body;
+
+    const newComment = {
+      postId,
+      author,
+      content,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    };
+
+    // MongoDB에 데이터 추가
+    await db.collection('comment').insertOne(newComment);
+
+    res.status(201).json({ message: '댓글 작성 성공' });
+  } catch (error) {
+    console.error('댓글 작성 오류:', error);
+    res.status(500).json({ message: '댓글 작성 실패' });
+  }
+});
+
+
+// 특정 게시글의 댓글 조회
+app.get('/api/comments/:postId', async (req, res) => {
+  try {
+    const { postId } = req.params;
+    const comments = await db.collection('comment').find({ postId }).toArray();
+    res.json(comments);
+  } catch (error) {
+    console.error('댓글 조회 오류:', error);
+    res.status(500).json({ message: '댓글 조회 실패' });
+  }
+});
+
+
+
 
 
 // 리액트 빌드 파일 연동
