@@ -220,6 +220,28 @@ app.get('/api/comments/:postId', async (req, res) => {
   }
 });
 
+// 댓글 삭제
+app.delete('/api/comments', async (req, res) => {
+  try {
+    const { postId, author, content } = req.body; // 요청 본문에서 게시글 ID, 작성자, 댓글 내용 가져오기
+
+    // 특정 게시글(postId)의 댓글을 작성자와 함께 찾고 삭제
+    const result = await db.collection('comment').deleteOne({
+      postId,
+      author,
+      content, // 필요한 경우 content를 조건에 추가 (중복된 댓글 구분)
+    });
+
+    if (result.deletedCount === 0) {
+      return res.status(404).json({ message: '댓글이 없거나 삭제 권한이 없습니다.' });
+    }
+
+    res.status(200).json({ message: '댓글 삭제 성공' });
+  } catch (error) {
+    console.error('댓글 삭제 오류:', error);
+    res.status(500).json({ message: '댓글 삭제 실패' });
+  }
+});
 
 
 

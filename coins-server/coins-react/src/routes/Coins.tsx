@@ -72,25 +72,26 @@ const setupWebSocket = ()=>{
              change: data.change, // 변화 상태
              code: data.code, // 심볼
            };
-   
-           setTickerData(prevData => {
-             const existingIndex = prevData.findIndex(ticker => ticker.code === newTicker.code);
-             if (existingIndex !== -1) {
-               const updatedData = [...prevData];
-               updatedData[existingIndex] = newTicker;
-               return updatedData;
-             } else {
-               return [...prevData, newTicker];
-             }
-           });
-         }
-       } else {
-         console.error('Received data is not a string:', result);
-       }
-     };
-   
-     reader.readAsText(event.data); // Blob 데이터를 텍스트로 읽기
-   };
+           if (newTicker.tradePrice > 1 && newTicker.accTradePrice24h > 0) {
+            setTickerData((prevData) => {
+              const existingIndex = prevData.findIndex((ticker) => ticker.code === newTicker.code);
+              if (existingIndex !== -1) {
+                const updatedData = [...prevData];
+                updatedData[existingIndex] = newTicker;
+                return updatedData;
+              } else {
+                return [...prevData, newTicker];
+              }
+            });
+          }
+        }
+      } else {
+        console.error('Received data is not a string:', result);
+      }
+    };
+  
+    reader.readAsText(event.data); // Blob 데이터를 텍스트로 읽기
+  };
    
 
  socket.onerror = (error) => {
@@ -215,8 +216,6 @@ const setupWebSocket = ()=>{
         {noResultsMessage && <h3 className='text-[#FAFAF9]'>{noResultsMessage}</h3>}
         {filteredData.map((coin) => {
                          console.log(coin.tradePrice)
-                        //  비정상적인 거래대금, 현재값 이슈!!!@#!#!@#!#!#@
-                        if(coin.tradePrice <= 0.000001 || coin.accTradePrice24h === 0)return null;
 
                         return (
                             <CoinRow 
