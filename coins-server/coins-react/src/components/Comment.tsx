@@ -41,6 +41,18 @@ const Comment = ({postId}:{postId:string}) => {
         console.error('댓글 조회 오류',error)
     }
   } 
+ // 댓글 삭제
+ const handleDelete = async (commentId: string) => {
+  console.log(commentId)
+  try {
+    await axios.delete(`http://localhost:8080/api/comments/${commentId}`);
+    alert("삭제 성공");
+    getComment(); // 삭제 후 댓글 목록 갱신
+  } catch (error) {
+    console.error("댓글 삭제 오류", error);
+    alert("삭제 실패");
+  }
+};
 
   
   useEffect(()=>{
@@ -60,7 +72,7 @@ const Comment = ({postId}:{postId:string}) => {
         {
             comments.length>0 ? (
                 comments.map(comment =>(
-                    <CommentRow key={comment._id} comment={comment} ></CommentRow>
+                    <CommentRow key={comment._id} comment={comment}  onDelete={handleDelete}></CommentRow>
                     
                 ))
             ) : (

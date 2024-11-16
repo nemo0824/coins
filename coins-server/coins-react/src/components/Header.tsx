@@ -58,7 +58,7 @@ export const Header = () => {
         <span className='text-white min-w-[60px]'>{nickname}님</span>
         : ''
         }
-        {isLogged ? <button className='text-black bg-slate-200 rounded-full px-2 text-sm hover:text-blue-500' onClick={handleLogout}>Logout</button> : <button className='text-red-500' onClick={handleLoginPage}>LogIn</button>}
+        {isLogged ? <button className='text-blue-500 bg-slate-200 rounded-full px-2 text-sm border border-blue-500 hover:bg-blue-500 hover:text-white' onClick={handleLogout}>Logout</button> : <button className='text-red-500 bg-slate-200 rounded-full px-2 text-sm border border-red-500 hover:bg-red-500 hover:text-white' onClick={handleLoginPage}>LogIn</button>}
       </article>
     </header>
   )

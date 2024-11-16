@@ -220,16 +220,20 @@ app.get('/api/comments/:postId', async (req, res) => {
   }
 });
 
-// 댓글 삭제
-app.delete('/api/comments', async (req, res) => {
-  try {
-    const { postId, author, content } = req.body; // 요청 본문에서 게시글 ID, 작성자, 댓글 내용 가져오기
 
-    // 특정 게시글(postId)의 댓글을 작성자와 함께 찾고 삭제
+
+// 댓글 삭제
+app.delete('/api/comments/:commentId', async (req, res) => {
+  try {
+    const { commentId } = req.params;  // URL에서 받은 commentId
+
+    // commentId가 ObjectId로 변환 가능한지 확인하고 변환
+    if (!ObjectId.isValid(commentId)) {
+      return res.status(400).json({ message: '유효하지 않은 댓글 ID' });
+    }
+
     const result = await db.collection('comment').deleteOne({
-      postId,
-      author,
-      content, // 필요한 경우 content를 조건에 추가 (중복된 댓글 구분)
+      _id: new ObjectId(commentId)  // commentId만으로 삭제
     });
 
     if (result.deletedCount === 0) {
@@ -242,6 +246,8 @@ app.delete('/api/comments', async (req, res) => {
     res.status(500).json({ message: '댓글 삭제 실패' });
   }
 });
+
+
 
 
 
