@@ -205,7 +205,7 @@ const setupWebSocket = ()=>{
        <table className='min-w-[600px] max-w-[650px] table-fixed  mt-3'>
         <thead>
        
-          <tr className='text-[#FAFAF9] border border-t-white-300 bg-stone-800'>
+          <tr className='text-[#FAFAF9] border border-t-white-300 bg-stone-800 whitespace-nowrap'>
             <th onClick={handleNameChange} className='cursor-pointer text-left py-3 px-2'>한/영 <HiChevronUpDown className='inline-block'/></th>
             <th onClick={handleSortPrice} className='cursor-pointer text-left py-3 px-2'>현재가 <HiChevronUpDown className='inline-block'/></th>
             <th onClick={handleSortDay} className='cursor-pointer text-left py-3 px-2'>전일대비 <HiChevronUpDown className='inline-block'/></th>

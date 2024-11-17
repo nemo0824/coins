@@ -59,12 +59,12 @@ const Post = ({ category }: { category: string }) => {
         <section className='text-white w-full'>
             <table className='min-w-[550px] w-full table-fixed'>
                 <thead>
-                    <tr className='text-[#FAFAF9] border border-t-white-300 bg-stone-800'>
-                        <th className='cursor-pointer text-left py-2 px-2'>순서</th>
+                    <tr className='text-[#FAFAF9] border border-t-white-300 bg-stone-800 whitespace-nowrap'>
+                        <th className='cursor-pointer text-left py-2 px-2 w-[10%]'>순서</th>
                         <th className='cursor-pointer text-left py-2 px-2'>카테고리</th>
                         <th className='cursor-pointer text-left py-2 px-2'>제목</th>
-                        <th className='cursor-pointer text-left py-2 px-2'>작성자</th>
-                        <th className='cursor-pointer text-left py-2 px-2'>작성일</th>
+                        <th className='cursor-pointer text-left py-2 px-2 w-[10%]'>작성자</th>
+                        <th className='cursor-pointer text-left py-2 px-2 text-right'>작성일</th>
                     </tr>
                 </thead>
                 <tbody>

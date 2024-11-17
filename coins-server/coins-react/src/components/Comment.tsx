@@ -41,7 +41,7 @@ const Comment = ({postId}:{postId:string}) => {
         console.error('댓글 조회 오류',error)
     }
   } 
- // 댓글 삭제
+ // 댓글 삭제ㅌ
  const handleDelete = async (commentId: string) => {
   console.log(commentId)
   try {
@@ -64,6 +64,7 @@ const Comment = ({postId}:{postId:string}) => {
         <textarea 
           placeholder='댓글을 입력해주세요'
           onChange={(e)=>{setNewComment(e.target.value)}}
+          value={newComment}
           className='w-full h-16 overflow-y-auto resize-none border border-gray-300 p-2 mr-4' />
         <button onClick={handleSubmitComment} className='border h-16 border-white text-white px-2 rounded-md text-nowrap'>댓글 작성</button>
         </div>
@@ -76,7 +77,7 @@ const Comment = ({postId}:{postId:string}) => {
                     
                 ))
             ) : (
-                <li>없어용</li>
+                <li>작성된 댓글이 없습니다</li>
             )
         }
         </ul>

@@ -66,7 +66,7 @@ const PostDialog = ({category, handlePostSubmit, isEdit, postData}:PropsPost) =>
         }else{
         //   작성할시
         await axios.post('http://localhost:8080/api/posts', {
-         ...formData,
+         ...formData,  
           category,
           author: nickname,
         })
