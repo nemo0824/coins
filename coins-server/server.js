@@ -248,6 +248,40 @@ app.delete('/api/comments/:commentId', async (req, res) => {
 });
 
 
+// 댓글 수정
+app.put('/api/comments/:commentId', async (req, res) => {
+  try {
+    const { commentId } = req.params;
+    const { content } = req.body;
+
+    // 댓글 ID가 유효한지 확인
+    if (!ObjectId.isValid(commentId)) {
+      return res.status(400).json({ message: '유효하지 않은 댓글 ID' });
+    }
+
+    // 댓글 내용이 비어있는지 확인
+    if (!content) {
+      return res.status(400).json({ message: '댓글 내용을 입력해주세요.' });
+    }
+
+    // 댓글 수정
+    const result = await db.collection('comment').updateOne(
+      { _id: new ObjectId(commentId) }, // 수정할 댓글 찾기
+      { $set: { content, updatedAt: new Date() } } // 수정할 데이터
+    );
+
+    if (result.matchedCount === 0) {
+      return res.status(404).json({ message: '댓글이 없거나 수정 권한이 없습니다.' });
+    }
+
+    res.status(200).json({ message: '댓글 수정 성공' });
+  } catch (error) {
+    console.error('댓글 수정 오류:', error);
+    res.status(500).json({ message: '댓글 수정 실패' });
+  }
+});
+
+
 
 
 

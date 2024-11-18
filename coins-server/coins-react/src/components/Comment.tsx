@@ -2,14 +2,24 @@ import React, { useEffect, useState } from 'react'
 import axios from 'axios'
 import CommentRow from './CommentRow'
 import store from '../lib/store'
+import { useNavigate } from 'react-router-dom'
 
 const Comment = ({postId}:{postId:string}) => {
   const [comments, setComments] = useState([])
   const [newComment, setNewComment] = useState("")
   const {nickname} = store.useUserStore()
+  const [isEditId, setIsEditId] = useState<string|null>(null)
+  const [editContent, setEditContent] = useState("")
+  const {isLogged} = store.useUserLogin()
+  const navigate = useNavigate()
 // 댓글 작성
   const handleSubmitComment = async()=>{
      try{
+      if(!isLogged){
+        alert("로그인 페이지로 이동합니다")
+        navigate("/login")
+        return;
+      }
       if(!newComment){
         return alert("댓글 입력 해주세요")
       }
@@ -53,7 +63,29 @@ const Comment = ({postId}:{postId:string}) => {
     alert("삭제 실패");
   }
 };
-
+// 댓글 수정 시작
+ const handleEdit = async(commentId:string, content:string)=>{
+  setIsEditId(commentId);
+  setEditContent(content);
+ }
+// 수정한 댓글 저장
+ const handleEditSave = async (commentId: string) => {
+  try {
+    await axios.put(`http://localhost:8080/api/comments/${commentId}`, {
+      content: editContent,
+    });
+    alert('수정 성공');
+    setIsEditId(null); // 수정 모드 종료
+    getComment(); // 댓글 새로고침
+  } catch (error) {
+    console.error('댓글 수정 오류', error);
+    alert('수정 실패');
+  }
+};
+// 댓글 수정 취소
+const handleEditCancel = () => {
+  setIsEditId(null); // 수정 모드 종료
+};
   
   useEffect(()=>{
     getComment()
@@ -73,7 +105,17 @@ const Comment = ({postId}:{postId:string}) => {
         {
             comments.length>0 ? (
                 comments.map(comment =>(
-                    <CommentRow key={comment._id} comment={comment}  onDelete={handleDelete}></CommentRow>
+                    <CommentRow 
+                    key={comment._id} 
+                    comment={comment}  
+                    onDelete={handleDelete} 
+                    onEditSave={handleEditSave} 
+                    onEdit={handleEdit} 
+                    setEditContent ={setEditContent}
+                    editContent = {editContent}
+                    isEditing={isEditId === comment._id} 
+                    onEditCancel={handleEditCancel}
+                    ></CommentRow>
                     
                 ))
             ) : (
