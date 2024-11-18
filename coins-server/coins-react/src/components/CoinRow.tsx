@@ -9,7 +9,7 @@ interface CoinPrice {
     signedChangePrice: number;
     change: string;
     code: string;
-    displayName: string | undefined;
+    displayName: string;
   }
 
 

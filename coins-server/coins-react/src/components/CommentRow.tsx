@@ -11,11 +11,11 @@ interface CommnetProps{
 }
 interface CommentRowProps {
     comment: CommnetProps;
-    onDelete: (commentId: string) => void;  // 삭제 함수의 타입 지정
+    onDelete: (commentId: string) => void;  
     onEdit: (commentId:string, content:string)=> void
     onEditSave: (commentId:string) => void
     setEditContent: (content: string) => void
-    isEditing:boolean
+    isEditing:boolean;
     editContent:string;
     onEditCancel:()=> void
     
@@ -45,6 +45,7 @@ const CommentRow = ({comment, onDelete, onEdit, onEditSave, setEditContent, isEd
         </div>
         <div className="w-[20%] flex justify-end items-center">
         <span className="whitespace-nowrap">{formatDate(comment.createdAt)}</span>
+        {/* 로그인 && 로그인된 닉네임 과 저자 같을떄 */}
         {isLogged && nickname == comment.author && (
           <>
             {isEditing ? (

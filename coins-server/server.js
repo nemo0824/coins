@@ -107,6 +107,7 @@ app.get('/api/posts', async (req, res)=>{
     res.status(500).json({message: '게시글 조회 실패'})
   }
 })
+
 // 게시글 작성
 app.post('/api/posts', async (req, res) => {
   try {

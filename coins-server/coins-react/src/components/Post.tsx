@@ -14,7 +14,7 @@ interface Post {
     author: string;
 }
 
-const Post = ({ category }: { category: string }) => {
+const Post = ({ category, displayName }: { category: string , displayName:string}) => {
    
     const [posts, setPosts] = useState<Post[]>([]);
     const [currentPage, setCurrentPage] = useState(1);
@@ -25,6 +25,7 @@ const Post = ({ category }: { category: string }) => {
     const getPostList = async () => {
         const response = await axios.get('http://localhost:8080/api/posts');
         console.log("무슨값이 나오나? ", response.data);
+        
         setPosts(response.data);
     }
 
@@ -74,7 +75,7 @@ const Post = ({ category }: { category: string }) => {
                         </tr>
                     ) : (
                         currentPosts.map((post, index) => (
-                            <PostRow key={post._id} post={post} index={index + indexOfFirstPost + 1} />
+                            <PostRow key={post._id} post={post} index={index + indexOfFirstPost + 1} displayName={displayName}/>
                         ))
                     )}
                 </tbody>

@@ -12,9 +12,10 @@ interface PropsPost{
 interface PostRowPost{
     post:PropsPost;
     index:number;
+    displayName:string;
 }
 
-const PostRow = ({post, index}:PostRowPost) => {
+const PostRow = ({post, index, displayName}:PostRowPost) => {
   const navigate = useNavigate()
   
   const handleDetail = ()=>{
@@ -25,7 +26,7 @@ const PostRow = ({post, index}:PostRowPost) => {
   return (
     <tr className='text-neutral-300 border-b-[1px] border-b-[rgb(41, 37, 36)] w-full cursor-pointer whitespace-nowrap' onClick={handleDetail}>
         <td className='py-1.5 px-2 max-w-[50px] truncate'>{index}</td>
-        <td className='py-1.5 px-2 max-w-[100px] truncate'>{post.category}</td>
+        <td className='py-1.5 px-2 max-w-[100px] truncate'>{displayName}</td>
         <td className='py-1.5 px-2 max-w-[200px] truncate '>{post.title}</td>
         <td className='py-1.5 px-2 max-w-[100px] truncate'>{post.author}</td>
         <td className='py-1.5 px-2 max-w-[200px] truncate text-right'>{formatDate(post.createdAt)}</td>

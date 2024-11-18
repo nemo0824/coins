@@ -32,7 +32,7 @@ const Coins = () => {
   const [isPriceDes, setIsPriceDes] = useState(false);
   const [isDayDes, setIsDayDes] = useState(false)
   const [isDayTradeDes, setIsDayTradeDes] = useState(false)
-  const {searchTerm, setSearchTerm} = store.useSearchState()
+  const {searchTerm} = store.useSearchState()
 const setupWebSocket = ()=>{
  // 소켓 연결 
  const socket = new WebSocket('wss://ws-api.bithumb.com/websocket/v1');
@@ -61,7 +61,7 @@ const setupWebSocket = ()=>{
        // result가 string인지 확인
        if (typeof result === 'string') {
          const data = JSON.parse(result); // 변환된 텍스트를 JSON으로 파싱
-         // console.log('수신된 데이터:', data);
+        
    
          if (data && data.type === 'ticker') {
            const newTicker: TickerPrice = {
@@ -139,7 +139,7 @@ const setupWebSocket = ()=>{
       .then(response => console.log("초기값",response.data))
       .catch(err => console.error(err));
   }
-
+ 
   const getNameChange = ()=>{
     axios.get('https://api.bithumb.com/v1/market/all')
     .then(response => setCoinNames(response.data))
@@ -194,7 +194,7 @@ const setupWebSocket = ()=>{
 
     // 검색로직 분리 유지보수성을위해서
     const filteredData = searchTerm ? combinedData.filter(coin => coin.displayName?.toLocaleLowerCase().includes(searchTerm.toLocaleLowerCase())) : combinedData
-
+    console.log(filteredData, "filteredData")
     const noResultsMessage = filteredData.length === 0 && searchTerm ? "검색 결과가 없습니다." : null;
 
   
