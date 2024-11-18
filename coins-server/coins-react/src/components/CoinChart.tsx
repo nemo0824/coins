@@ -86,16 +86,21 @@ export function CoinChart() {
 
   return (
     <ChartContainer config={chartConfig} className="max-h-[600px] w-full">
-      <BarChart accessibilityLayer data={chartData}>
-        <CartesianGrid vertical={false} />
+      <BarChart accessibilityLayer data={chartData} >
+        <CartesianGrid vertical={false}  />
         <XAxis
           dataKey="first_day_of_period"
           tickLine={false}
           tickMargin={10}
           axisLine={false}
           tickFormatter={(value) => value}
+          tick={{
+            fill: 'white',  
+            fontSize: 12,       
+            fontWeight: 'bold', 
+          }}
         />
-        <ChartTooltip content={<ChartTooltipContent />} />
+        <ChartTooltip content={<ChartTooltipContent/>} />
         <ChartLegend content={<ChartLegendContent />} />
         <Bar dataKey="high_price" fill="var(--color-highPrice)" radius={4} />
         <Bar dataKey="low_price" fill="var(--color-lowPrice)" radius={4} />

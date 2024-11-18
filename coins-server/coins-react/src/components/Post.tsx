@@ -24,9 +24,10 @@ const Post = ({ category, displayName }: { category: string , displayName:string
     // 게시글 가져오기
     const getPostList = async () => {
         const response = await axios.get('http://localhost:8080/api/posts');
-        console.log("무슨값이 나오나? ", response.data);
+        // console.log("무슨값이 나오나? ", response.data);
         
         setPosts(response.data);
+        console.log("머여머여머여며어ㅕ",posts)
     }
 
     useEffect(() => {

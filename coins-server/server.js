@@ -112,13 +112,14 @@ app.get('/api/posts', async (req, res)=>{
 app.post('/api/posts', async (req, res) => {
   try {
     
-    const { title, category, author, content } = req.body;
+    const { title, category, author, content, profileImage } = req.body;
 
     const newPost = {
       title,
       category,
       author,
       content,
+      profileImage,
       createdAt: new Date(),
     };
 

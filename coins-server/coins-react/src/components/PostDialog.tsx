@@ -27,7 +27,7 @@ interface PropsPost{
 
 
 const PostDialog = ({category, handlePostSubmit, isEdit, postData}:PropsPost) => {
-    const {nickname} = store.useUserStore()
+    const {nickname, profileImage} = store.useUserStore()
     const [formData , setFormData] = useState({
         title:'',
         content:'',
@@ -50,7 +50,7 @@ const PostDialog = ({category, handlePostSubmit, isEdit, postData}:PropsPost) =>
      }
 
      try{
-        // 수정수정시
+        // 수정
         if(isEdit){
             await axios.put(`http://localhost:8080/api/posts/${postData?._id}`,{
                 ...formData,
@@ -64,11 +64,12 @@ const PostDialog = ({category, handlePostSubmit, isEdit, postData}:PropsPost) =>
          
             
         }else{
-        //   작성할시
+        //   작성
         await axios.post('http://localhost:8080/api/posts', {
          ...formData,  
           category,
           author: nickname,
+          profileImage
         })
         alert("게시글 작성완료!!")
         setFormData({ title: '', content: '' });

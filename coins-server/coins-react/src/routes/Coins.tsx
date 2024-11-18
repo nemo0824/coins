@@ -2,9 +2,6 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import CoinRow from '../components/CoinRow';
 import store from '../lib/store';
-import { response } from 'express';
-import { useSearchParams } from 'react-router-dom';
-import useSearchState from '../lib/store';
 import { HiChevronUpDown } from "react-icons/hi2";
 interface TickerPrice {
     tradePrice: number; // 현재가
