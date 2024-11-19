@@ -33,17 +33,17 @@ const CommentRow = ({comment, onDelete, onEdit, onEditSave, setEditContent, isEd
   return (
     <div className='flex justify-around  border-b-2 border-green-500 p-1.5'>
         <div className='w-[10%]'>{comment.author}</div>
-        <div className='w-[70%]'>
+        <div className='w-[60%]'>
            {isEditing ? (
             <input 
                 value={editContent}  
                 onChange={(e)=> setEditContent(e.target.value)}
-                className='text-black w-full'></input>
+                className='text-black w-[90%]'></input>
            ):(
-            <p>{comment.content}</p>
+            <p className='truncate'>{comment.content}</p>
            )}
         </div>
-        <div className="w-[20%] flex justify-end items-center">
+        <div className="w-[30%] flex justify-end items-center">
         <span className="whitespace-nowrap">{formatDate(comment.createdAt)}</span>
         {/* 로그인 && 로그인된 닉네임 과 저자 같을떄 */}
         {isLogged && nickname == comment.author && (

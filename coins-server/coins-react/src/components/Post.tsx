@@ -65,7 +65,7 @@ const Post = ({ category, displayName }: { category: string , displayName:string
                         <th className='cursor-pointer text-left py-2 px-2 w-[10%]'>순서</th>
                         <th className='cursor-pointer text-left py-2 px-2'>카테고리</th>
                         <th className='cursor-pointer text-left py-2 px-2'>제목</th>
-                        <th className='cursor-pointer text-left py-2 px-2 w-[10%]'>작성자</th>
+                        <th className='cursor-pointer text-left py-2 px-2 w-[20%]'>작성자</th>
                         <th className='cursor-pointer text-left py-2 px-2 text-right'>작성일</th>
                     </tr>
                 </thead>

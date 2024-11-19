@@ -91,7 +91,7 @@ const handleEditCancel = () => {
     getComment()
   },[])
   return (
-    <div className='w-full mt-8'>
+    <div className='w-full mt-5'>
         <div className='flex items-center justify-center'>
         <textarea 
           placeholder='댓글을 입력해주세요'

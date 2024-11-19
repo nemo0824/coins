@@ -39,10 +39,12 @@ const PostDetail = () => {
 
         {/* <div>{index}</div> */}
         <div className='text-[32px] font-bold text-green-500'>{post.category} 게시판</div>
-        <h1 className='text-[20px]'>{post.title}</h1>
-        <div className='flex items-center gap-4 mt-4'>
-          <img src={post.profileImage} className='w-[40px] h-[40px] rounded-full'></img>
-          <div>{post.author}</div>
+        <div className='flex justify-between mt-4 items-center'>
+          <h1 className='text-[20px]'>{post.title}</h1>
+          <div className='flex items-center gap-4'>
+            <img src={post.profileImage} className='w-[40px] h-[40px] rounded-full'></img>
+            <div>{post.author}</div>
+          </div>
         </div>
         
         <div>{post.createAt}</div>
@@ -52,7 +54,7 @@ const PostDetail = () => {
         <div>{post.content}</div>
       </article>
       { isLogged && nickname === post.author &&(
-      <article className='flex flex-row justify-end text-white gap-3 mt-2'>
+      <article className='flex flex-row justify-end text-white gap-3 mt-5'>
        
         <PostDialog 
           onClick={()=> setIsEdit(true)}

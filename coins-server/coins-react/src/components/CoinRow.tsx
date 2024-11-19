@@ -37,18 +37,18 @@ const CoinRow = ({ tradePrice, accTradePrice24h, signedChangeRate,displayName, c
   return (
     
     <tr key={code} className='text-[#FAFAF9] border-b-[1px] border-b-[rgb(41, 37, 36)] w-full cursor-pointer hover:bg-slate-800' onClick={handleRowClick}> 
-      <td className="py-3 px-2 max-w-[150px] truncate ">
+      <td className="py-3 px-2 w-[170px] truncate ">
         {displayName}
       </td>
-      <td className={`py-3 px-2  ${getChangeColor()}`}>
+      <td className={`py-3 px-2 w-[162.5px] whitespace-nowrap ${getChangeColor()}`}>
         {tradePrice.toLocaleString()} 원
       </td>
-      <td className={`py-3 px-2  ${getChangeColor()}`}>
+      <td className={`py-3 px-2 w-[105px] ${getChangeColor()}`}>
         {signedChangeRate > 0 
           ? `+${(signedChangeRate * 100).toFixed(2)}%` 
           : `${(signedChangeRate * 100).toFixed(2)}%`}
       </td>
-      <td className="py-3 px-2 text-right  truncate">
+      <td className="py-3 px-2 text-right w-[162.5px] truncate">
         {Math.trunc(accTradePrice24h).toLocaleString()} 원
     </td>
     </tr>

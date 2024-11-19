@@ -203,10 +203,10 @@ const setupWebSocket = ()=>{
         <thead>
        
           <tr className='text-[#FAFAF9] border border-t-white-300 bg-stone-800 whitespace-nowrap'>
-            <th onClick={handleNameChange} className='cursor-pointer text-left py-3 px-2'>한/영 <HiChevronUpDown className='inline-block'/></th>
-            <th onClick={handleSortPrice} className='cursor-pointer text-left py-3 px-2'>현재가 <HiChevronUpDown className='inline-block'/></th>
-            <th onClick={handleSortDay} className='cursor-pointer text-left py-3 px-2'>전일대비 <HiChevronUpDown className='inline-block'/></th>
-            <th onClick={handleTradePrice} className='cursor-pointer text-right py-3 px-2'>거래대금 <HiChevronUpDown className='inline-block'/></th>
+            <th onClick={handleNameChange} className='cursor-pointer text-left py-3 px-2 w-[170px]'>한/영 <HiChevronUpDown className='inline-block'/></th>
+            <th onClick={handleSortPrice} className='cursor-pointer text-left py-3 px-2 w-[162.5px]'>현재가 <HiChevronUpDown className='inline-block'/></th>
+            <th onClick={handleSortDay} className='cursor-pointer text-left py-3 px-2 w-[105px]'>전일대비 <HiChevronUpDown className='inline-block'/></th>
+            <th onClick={handleTradePrice} className='cursor-pointer text-right py-3 px-2 w-[162.5px]'>거래대금 <HiChevronUpDown className='inline-block'/></th>
           </tr>
         </thead>
         <tbody>
