@@ -20,24 +20,24 @@ jobs:
       with:
         node-version: '20'
 
-    # 3. coin-react 빌드
-    - name: Install dependencies for coin-react
-      working-directory: ./coin-react
+    # 3. coins-react 빌드
+    - name: Install dependencies for coins-react
+      working-directory: ./coins-server/coins-react
       run: npm install
 
-    - name: Build coin-react
-      working-directory: ./coin-react
+    - name: Build coins-react
+      working-directory: ./coins-server/coins-react
       run: npm run build
 
-    # 4. coin-server 작업 (예: 백엔드 빌드나 테스트)
-    - name: Install dependencies for coin-server
-      working-directory: ./coin-server
+    # 4. coins-server 작업
+    - name: Install dependencies for coins-server
+      working-directory: ./coins-server
       run: npm install
 
-    - name: Run tests for coin-server
-      working-directory: ./coin-server
-      run: npm test
+    - name: Run tests for coins-server
+      working-directory: ./coins-server
+      run: npm test -- --detectOpenHandles
 
-    # 5. 배포 단계 (필요 시 수정)
+    # 5. 배포 단계
     - name: Deploy to server
       run: echo "Deploying application..."

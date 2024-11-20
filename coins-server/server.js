@@ -285,6 +285,14 @@ app.put('/api/comments/:commentId', async (req, res) => {
 
 
 
+function add(a, b) {
+  return a + b;
+}
+
+module.exports = { add };
+
+
+
 
 
 
