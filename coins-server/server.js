@@ -20,8 +20,8 @@ app.use(cors()); // 클라이언트에서 요청을 허용하도록 설정
 
 
 // MongoDB 연결 설정
-let db;
-const url = 'mongodb+srv://nemo0824:Dlawodnjs09080%40@nemo0824.fqklg.mongodb.net/?retryWrites=true&w=majority&appName=nemo0824'
+// let db;
+// const url = 'mongodb+srv://nemo0824:Dlawodnjs09080%40@nemo0824.fqklg.mongodb.net/?retryWrites=true&w=majority&appName=nemo0824'
 // new MongoClient(url).connect().then((client)=>{
 //   console.log('DB 연결 성공');
 //   db = client.db('forum');
@@ -32,24 +32,24 @@ const url = 'mongodb+srv://nemo0824:Dlawodnjs09080%40@nemo0824.fqklg.mongodb.net
 //   console.log(err);
 // });
 
-// MongoDB 연결 설정 (async/await 사용)
-async function connectToDB() {
-  try {
-    const client = new MongoClient(url);
-    await client.connect();  // MongoDB 연결 완료될 때까지 기다림
-    console.log('DB 연결 성공');
-    db = client.db('forum');
-  } catch (err) {
-    console.log('MongoDB 연결 실패:', err);
-    process.exit(1);  // 연결 실패 시 서버 종료
-  }
+const PORT = 8080;
+
+let db;
+let client;
+
+async function startServer() {
+  client = new MongoClient('mongodb+srv://nemo0824:Dlawodnjs09080%40@nemo0824.fqklg.mongodb.net/?retryWrites=true&w=majority&appName=nemo0824');
+  await client.connect();
+  db = client.db('forum');
+
+  app.listen(PORT, () => {
+    console.log(`http://localhost:${PORT} 에서 서버 실행 중`);
+  });
 }
 
-connectToDB().then(() => {
-  app.listen(8080, () => {
-    console.log('http://localhost:8080 에서 서버 실행 중');
-  });
-});
+startServer();
+
+
 
 
 // Cors 설정 미들웨어 사용 localhost:5173에서만 호출할수있도록
