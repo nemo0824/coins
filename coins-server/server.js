@@ -36,6 +36,7 @@ const PORT = 8080;
 
 let db;
 let client;
+let server;
 
 async function startServer() {
   // MongoDB 연결
@@ -45,7 +46,7 @@ async function startServer() {
 
   return new Promise((resolve, reject) => {
     // 서버 실행
-    app.listen(PORT, () => {
+    server = app.listen(PORT, () => {
       console.log(`http://localhost:${PORT} 에서 서버 실행 중`);
       resolve();
     }).on('error', reject);  // 서버 시작 실패 시 reject
@@ -59,18 +60,27 @@ beforeAll(async () => {
 
 // 테스트 후 서버 종료
 afterAll(async () => {
-  await client.close();  // MongoDB 연결 종료
-  console.log('서버 종료');
-});
+  // 서버 종료
+  await new Promise((resolve) => {
+    server.close(() => {
+      console.log('서버 종료');
+      resolve();
+    });
+  });
 
+  // MongoDB 연결 종료
+  await client.close();
+});
 
 // 서버 종료 시 MongoDB 연결 종료
 process.on('SIGINT', async () => {
   console.log('서버 종료 중...');
   await client.close(); // MongoDB 연결 종료
-  process.exit(0);
+  server.close(() => {
+    console.log('서버 종료 완료');
+    process.exit(0);  // 프로세스 종료
+  });
 });
-
 
 
 // Cors 설정 미들웨어 사용 localhost:5173에서만 호출할수있도록
