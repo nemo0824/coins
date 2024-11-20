@@ -22,15 +22,35 @@ app.use(cors()); // 클라이언트에서 요청을 허용하도록 설정
 // MongoDB 연결 설정
 let db;
 const url = 'mongodb+srv://nemo0824:Dlawodnjs09080%40@nemo0824.fqklg.mongodb.net/?retryWrites=true&w=majority&appName=nemo0824'
-new MongoClient(url).connect().then((client)=>{
-  console.log('DB 연결 성공');
-  db = client.db('forum');
-  app.listen(8080, ()=>{
+// new MongoClient(url).connect().then((client)=>{
+//   console.log('DB 연결 성공');
+//   db = client.db('forum');
+//   app.listen(8080, ()=>{
+//     console.log('http://localhost:8080 에서 서버 실행 중');
+//   });
+// }).catch((err)=>{
+//   console.log(err);
+// });
+
+// MongoDB 연결 설정 (async/await 사용)
+async function connectToDB() {
+  try {
+    const client = new MongoClient(url);
+    await client.connect();  // MongoDB 연결 완료될 때까지 기다림
+    console.log('DB 연결 성공');
+    db = client.db('forum');
+  } catch (err) {
+    console.log('MongoDB 연결 실패:', err);
+    process.exit(1);  // 연결 실패 시 서버 종료
+  }
+}
+
+connectToDB().then(() => {
+  app.listen(8080, () => {
     console.log('http://localhost:8080 에서 서버 실행 중');
   });
-}).catch((err)=>{
-  console.log(err);
 });
+
 
 // Cors 설정 미들웨어 사용 localhost:5173에서만 호출할수있도록
 app.use(cors({
@@ -48,6 +68,31 @@ app.get('/api/auth/kakao-login', (req, res) => {
 });
 
 // 프론트단에서 받아온 accCode로 token 요청
+// app.post('/api/auth/kakao-token', async (req, res) => {
+//   const { code } = req.body;
+
+//   try {
+//     const REST_API_KEY = process.env.KAKAO_REST_API_KEY;
+//     const REDIRECT_URI = 'http://localhost:5173/redirect';
+
+//     // 액세스 토큰 요청
+//     const response = await axios.post(`https://kauth.kakao.com/oauth/token`, null, {
+//       params: {
+//         grant_type: 'authorization_code',
+//         client_id: REST_API_KEY,
+//         redirect_uri: REDIRECT_URI,
+//         code: code,
+//       },
+//     });
+
+//     const accessToken = response.data.access_token;
+//     res.json({ accessToken });
+//   } catch (error) {
+//     console.error('토큰 요청 중 오류 발생:', error.response ? error.response.data : error.message);
+//     res.status(500).json({ error: '로그인 처리 중 오류가 발생했습니다.' });
+//   }
+// });
+
 app.post('/api/auth/kakao-token', async (req, res) => {
   const { code } = req.body;
 
@@ -72,6 +117,7 @@ app.post('/api/auth/kakao-token', async (req, res) => {
     res.status(500).json({ error: '로그인 처리 중 오류가 발생했습니다.' });
   }
 });
+
 
 // 받아온 카카오유저 정보 전달
 app.post('/api/auth/kakao-user', async (req, res) => {
