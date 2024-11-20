@@ -38,22 +38,31 @@ let db;
 let client;
 
 async function startServer() {
-  try {
-    // MongoDB 연결
-    client = new MongoClient('mongodb+srv://nemo0824:Dlawodnjs09080%40@nemo0824.fqklg.mongodb.net/?retryWrites=true&w=majority&appName=nemo0824');
-    await client.connect();
-    db = client.db('forum');
+  // MongoDB 연결
+  client = new MongoClient('mongodb+srv://nemo0824:Dlawodnjs09080%40@nemo0824.fqklg.mongodb.net/?retryWrites=true&w=majority&appName=nemo0824');
+  await client.connect();
+  db = client.db('forum');
 
+  return new Promise((resolve, reject) => {
     // 서버 실행
     app.listen(PORT, () => {
       console.log(`http://localhost:${PORT} 에서 서버 실행 중`);
-    });
-  } catch (err) {
-    console.error('서버 시작 중 오류 발생:', err);
-  }
+      resolve();
+    }).on('error', reject);  // 서버 시작 실패 시 reject
+  });
 }
 
-startServer();
+// 테스트 전 서버 시작
+beforeAll(async () => {
+  await startServer();
+});
+
+// 테스트 후 서버 종료
+afterAll(async () => {
+  await client.close();  // MongoDB 연결 종료
+  console.log('서버 종료');
+});
+
 
 // 서버 종료 시 MongoDB 연결 종료
 process.on('SIGINT', async () => {
