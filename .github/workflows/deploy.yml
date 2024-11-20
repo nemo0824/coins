@@ -20,7 +20,16 @@ jobs:
       with:
         node-version: '20'
 
-    # 3. coins-react 빌드
+    # 3. npm 캐시를 설정하여 종속성 설치 최적화
+    - name: Cache node modules
+      uses: actions/cache@v3
+      with:
+        path: ~/.npm
+        key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
+        restore-keys: |
+          ${{ runner.os }}-node-modules-
+
+    # 4. coins-react 빌드
     - name: Install dependencies for coins-react
       working-directory: ./coins-server/coins-react
       run: npm install
@@ -29,15 +38,14 @@ jobs:
       working-directory: ./coins-server/coins-react
       run: npm run build
 
-    # 4. coins-server 작업
+    # 5. coins-server 작업
     - name: Install dependencies for coins-server
       working-directory: ./coins-server
-      run: npm install
+      run: npm ci
 
+    # 6. 테스트 실행
     - name: Run tests for coins-server
       working-directory: ./coins-server
       run: npm test -- --detectOpenHandles
 
-    # 5. 배포 단계
-    - name: Deploy to server
-      run: echo "Deploying application..."
+    # 배포 단계를 제외하고 빌드만 확인
