@@ -10,19 +10,34 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+    # 1. 프로젝트 코드 체크아웃
     - name: Checkout code
       uses: actions/checkout@v3
 
+    # 2. Node.js 환경 설정
     - name: Setup Node.js
       uses: actions/setup-node@v3
       with:
-        node-version: 20
+        node-version: '20'
 
-    - name: Install dependencies
+    # 3. coin-react 빌드
+    - name: Install dependencies for coin-react
+      working-directory: ./coin-react
       run: npm install
 
-    - name: Build project
+    - name: Build coin-react
+      working-directory: ./coin-react
       run: npm run build
 
+    # 4. coin-server 작업 (예: 백엔드 빌드나 테스트)
+    - name: Install dependencies for coin-server
+      working-directory: ./coin-server
+      run: npm install
+
+    - name: Run tests for coin-server
+      working-directory: ./coin-server
+      run: npm test
+
+    # 5. 배포 단계 (필요 시 수정)
     - name: Deploy to server
       run: echo "Deploying application..."
