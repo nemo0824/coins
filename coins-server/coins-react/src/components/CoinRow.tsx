@@ -30,10 +30,7 @@ const CoinRow = ({ tradePrice, accTradePrice24h, signedChangeRate,displayName, c
            state: {displayName}
         })
      }
-    //  min-w-[150px] max-w-[200px]
-    //  min-w-[150px] max-w-[200px]
-    //  min-w-[100px] max-w-[150px]
-    //  min-w-[200px] max-w-[250px]
+   
   return (
     
     <tr key={code} className='text-[#FAFAF9] border-b-[1px] border-b-[rgb(41, 37, 36)] w-full cursor-pointer hover:bg-slate-800' onClick={handleRowClick}> 
