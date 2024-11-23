@@ -22,22 +22,26 @@ interface ICoinNames{
 }
 
 const Coins = () => {
-  const [tickerData, setTickerData] = useState<TickerPrice[]>([]); // 초기값을 빈 배열로 설정
-  const [coinName, setCoinName] = useState<string[]>([])
-  const [coinNames, setCoinNames] = useState<ICoinNames[]>([])
-  const [isKoreanName, setIsKoreanName] = useState(true);
-  const [isPriceDes, setIsPriceDes] = useState(false);
-  const [isDayDes, setIsDayDes] = useState(false)
-  const [isDayTradeDes, setIsDayTradeDes] = useState(false)
+  const [tickerData, setTickerData] = useState<TickerPrice[]>([]); 
+  const [coinCodes, setCoinCodes] = useState<string[]>([])  // coinCodes (코인 초기값을 가져오기위해서) 
+  const [coinNames, setCoinNames] = useState<ICoinNames[]>([]) // coinNames (한국이름, 영어이름 , codes)
+
+  // 정렬 영역
+  const [isKoreanName, setIsKoreanName] = useState(true); // 한/영 여부
+  const [isPriceDes, setIsPriceDes] = useState(false); // 현재가 내림차순여부 
+  const [isDayDes, setIsDayDes] = useState(false)// 전일대비 
+  const [isDayTradeDes, setIsDayTradeDes] = useState(false) // 거래대금
+
+
   const {searchTerm} = store.useSearchState()
 const setupWebSocket = ()=>{
  // 소켓 연결 
  const socket = new WebSocket('wss://ws-api.bithumb.com/websocket/v1');
- if (coinName.length === 0) return;
+ if (coinCodes.length === 0) return;
  // 구독메시지 작성
  const subscribeMessage = JSON.stringify([
    { "ticket": "test example" },
-   { "type": "ticker", "codes": coinName },
+   { "type": "ticker", "codes": coinCodes },
    { "format": "DEFAULT" }
  ]);
  // 소켓으로 송신
@@ -46,7 +50,6 @@ const setupWebSocket = ()=>{
    socket.send(subscribeMessage);
  };
 
-// 중복되는거 확인*(****)
 
  // 소켓으로 수신
  socket.onmessage = (event) => {
@@ -105,36 +108,39 @@ const setupWebSocket = ()=>{
 }
 
   useEffect(()=>{
-    const fetchData = async()=>{
-        await getCoinsName() 
-      }
-    fetchData()
+    // coin Code 가져오기
+      getCoinCodes() 
+    
+    // 한/영/코드 이름 가져오기 바꾸기위해서
     getNameChange()
   },[])
 
 
   useEffect(() => {
     const fetchDataAndSetupSocket = async () => {
-      if (coinName.length > 0) {
+      // coinCode가 가져온후에 
+      if (coinCodes.length > 0) {
+
         await getCoinInitial();
+
         setupWebSocket(); // WebSocket 설정 함수 호출
       }
     };
     fetchDataAndSetupSocket();
-  }, [coinName]);
+  }, [coinCodes]);
 
-  // 이름가져오기
-  const getCoinsName = async() =>{
+  // 초기 소켓 통신 이전에 coinCode 가져오기
+  const getCoinCodes = async() =>{
     axios.get<ICoinName[]>('https://api.bithumb.com/v1/market/all')
-    .then(response => setCoinName(response.data.map(coin=> coin.market)))
+    .then(response => setCoinCodes(response.data.map(coin=> coin.market)))
   }
 
 
-  // 첫 렌더링 이슈로 먼저 http api 통신을통해서 초기값가져오기
+  // 첫 렌더링 이슈로 먼저 http api 통신을통해서 초기값가져오기 getCoinCode을 통해서 
   const getCoinInitial = async() =>{  
-    axios.get(`https://api.bithumb.com/v1/ticker?markets=${[...coinName]}`)
-      .then(response => console.log("초기값",response.data))
-      .catch(err => console.error(err));
+    const response = await axios.get(`https://api.bithumb.com/v1/ticker?markets=${[...coinCodes]}`)
+     console.log("리리리ㅣㄹ",response.data)
+      // .catch(err => console.error(err));
   }
  
   const getNameChange = ()=>{
@@ -142,6 +148,8 @@ const setupWebSocket = ()=>{
     .then(response => setCoinNames(response.data))
     .catch(err => console.error(err));
   }
+
+  // -----------------------------정렬 영역 ---------------------------------------------------
   //영문 이름 한글 이름
   const handleNameChange = () => {
     setIsKoreanName(prev => !prev); 
@@ -191,7 +199,7 @@ const setupWebSocket = ()=>{
 
     // 검색로직 분리 유지보수성을위해서
     const filteredData = searchTerm ? combinedData.filter(coin => coin.displayName?.toLocaleLowerCase().includes(searchTerm.toLocaleLowerCase())) : combinedData
-    console.log(filteredData, "filteredData")
+    // console.log(filteredData, "filteredData")
     const noResultsMessage = filteredData.length === 0 && searchTerm ? "검색 결과가 없습니다." : null;
 
   
@@ -212,7 +220,7 @@ const setupWebSocket = ()=>{
         <tbody>
         {noResultsMessage && <h3 className='text-[#FAFAF9]'>{noResultsMessage}</h3>}
         {filteredData.map((coin) => {
-                         console.log(coin.tradePrice)
+                        //  console.log(coin.tradePrice)
 
                         return (
                             <CoinRow 

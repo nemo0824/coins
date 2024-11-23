@@ -36,51 +36,32 @@ const PORT = 8080;
 
 let db;
 let client;
-let server;
 
 async function startServer() {
-  // MongoDB 연결
-  client = new MongoClient('mongodb+srv://nemo0824:Dlawodnjs09080%40@nemo0824.fqklg.mongodb.net/?retryWrites=true&w=majority&appName=nemo0824');
-  await client.connect();
-  db = client.db('forum');
+  try {
+    // MongoDB 연결
+    client = new MongoClient('mongodb+srv://nemo0824:Dlawodnjs09080%40@nemo0824.fqklg.mongodb.net/?retryWrites=true&w=majority&appName=nemo0824');
+    await client.connect();
+    db = client.db('forum');
 
-  return new Promise((resolve, reject) => {
     // 서버 실행
-    server = app.listen(PORT, () => {
+    app.listen(PORT, () => {
       console.log(`http://localhost:${PORT} 에서 서버 실행 중`);
-      resolve();
-    }).on('error', reject);  // 서버 시작 실패 시 reject
-  });
+    });
+  } catch (err) {
+    console.error('서버 시작 중 오류 발생:', err);
+  }
 }
 
-// 테스트 전 서버 시작
-beforeAll(async () => {
-  await startServer();
-});
-
-// 테스트 후 서버 종료
-afterAll(async () => {
-  // 서버 종료
-  await new Promise((resolve) => {
-    server.close(() => {
-      console.log('서버 종료');
-      resolve();
-    });
-  });
-
-  // MongoDB 연결 종료
-  await client.close();
-});
+startServer();
 
 // 서버 종료 시 MongoDB 연결 종료
 process.on('SIGINT', async () => {
   console.log('서버 종료 중...');
   await client.close(); // MongoDB 연결 종료
-  server.close(() => {
-    console.log('서버 종료 완료');
-    process.exit(0);  // 프로세스 종료
-  });
+  process.exit(0);
 });
+
 
 
 // Cors 설정 미들웨어 사용 localhost:5173에서만 호출할수있도록
