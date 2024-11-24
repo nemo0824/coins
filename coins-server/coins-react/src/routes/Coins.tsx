@@ -121,7 +121,8 @@ const setupWebSocket = ()=>{
       // coinCode가 가져온후에 
       if (coinCodes.length > 0) {
 
-        await getCoinInitial();
+        // await getCoinInitial();
+        console.log("초기값 호출됐나?")
 
         setupWebSocket(); // WebSocket 설정 함수 호출
       }
@@ -138,9 +139,28 @@ const setupWebSocket = ()=>{
 
   // 첫 렌더링 이슈로 먼저 http api 통신을통해서 초기값가져오기 getCoinCode을 통해서 
   const getCoinInitial = async() =>{  
-    const response = await axios.get(`https://api.bithumb.com/v1/ticker?markets=${[...coinCodes]}`)
-     console.log("리리리ㅣㄹ",response.data)
-      // .catch(err => console.error(err));
+    try {
+      const response = await axios.get(`https://api.bithumb.com/v1/ticker?markets=${coinCodes.join(',')}`);
+      console.log("data",response.data)
+      console.log("data.data",response.data.data)
+      const initialData = response.data.map((coin:any) => {
+        return {
+          tradePrice: coin.closing_price,        // 현재가
+          accTradePrice24h: coin.acc_trade_value_24h, // 24시간 거래대금
+          signedChangeRate: coin.fluctate_rate_24H,   // 부호가 있는 변화율
+          signedChangePrice: coin.fluctate_24H,       // 부호가 있는 변화액
+          change: coin.change,                    // 변화 상태
+          code: coin.coin,                       // 심볼
+        };
+      });
+      console.log("initialData", initialData)
+      // 초기 데이터를 상태에 반영
+      setTickerData(initialData);
+      console.log("처음에 화면 렌더링 쉽게해줌 사용자 경험 향상시켜줌")
+    } catch (error) {
+      console.error("Error fetching initial coin data:", error);
+    }
+    
   }
  
   const getNameChange = ()=>{
