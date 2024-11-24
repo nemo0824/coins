@@ -3,6 +3,7 @@ import axios from 'axios';
 import CoinRow from '../components/CoinRow';
 import store from '../lib/store';
 import { HiChevronUpDown } from "react-icons/hi2";
+
 interface TickerPrice {
     tradePrice: number; // 현재가
     accTradePrice24h: number; // 24시간 거래대금
@@ -11,6 +12,16 @@ interface TickerPrice {
     change: string; // 변화 상태
     code: string;  
 }
+
+interface CoinResponse {
+  trade_price: number;            // 현재가
+  acc_trade_price_24h: number;    // 24시간 거래대금
+  signed_change_rate: number;     // 부호가 있는 변화율
+  signed_change_price: number;    // 부호가 있는 변화액
+  change: string;                 // 변화 상태 (e.g., "RISE", "FALL")
+  market: string;                 // 코인 마켓 코드 (e.g., "KRW-BTC")
+}
+
 interface ICoinName{
     market:string;
 }
@@ -72,6 +83,7 @@ const setupWebSocket = ()=>{
              change: data.change, // 변화 상태
              code: data.code, // 심볼
            };
+          //  coin으ㅣ 가격과 24시간 거래대금 오류방지
            if (newTicker.tradePrice > 1 && newTicker.accTradePrice24h > 0) {
             setTickerData((prevData) => {
               const existingIndex = prevData.findIndex((ticker) => ticker.code === newTicker.code);
@@ -121,7 +133,7 @@ const setupWebSocket = ()=>{
       // coinCode가 가져온후에 
       if (coinCodes.length > 0) {
 
-        // await getCoinInitial();
+        await getCoinInitial();
         console.log("초기값 호출됐나?")
 
         setupWebSocket(); // WebSocket 설정 함수 호출
@@ -142,18 +154,17 @@ const setupWebSocket = ()=>{
     try {
       const response = await axios.get(`https://api.bithumb.com/v1/ticker?markets=${coinCodes.join(',')}`);
       console.log("data",response.data)
-      console.log("data.data",response.data.data)
-      const initialData = response.data.map((coin:any) => {
-        return {
-          tradePrice: coin.closing_price,        // 현재가
-          accTradePrice24h: coin.acc_trade_value_24h, // 24시간 거래대금
-          signedChangeRate: coin.fluctate_rate_24H,   // 부호가 있는 변화율
-          signedChangePrice: coin.fluctate_24H,       // 부호가 있는 변화액
-          change: coin.change,                    // 변화 상태
-          code: coin.coin,                       // 심볼
-        };
-      });
-      console.log("initialData", initialData)
+   
+      const initialData : TickerPrice[] = response.data.map((coin:CoinResponse)=>({
+        tradePrice: coin.trade_price,             // 현재가
+        accTradePrice24h: coin.acc_trade_price_24h, // 24시간 거래대금
+        signedChangeRate: coin.signed_change_rate, // 부호가 있는 변화율
+        signedChangePrice: coin.signed_change_price, // 부호가 있는 변화액
+        change: coin.change,                              // 변화 상태
+        code: coin.market,        
+      }))
+      console.log("initialData",initialData)
+     
       // 초기 데이터를 상태에 반영
       setTickerData(initialData);
       console.log("처음에 화면 렌더링 쉽게해줌 사용자 경험 향상시켜줌")
