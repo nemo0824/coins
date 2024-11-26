@@ -85,6 +85,8 @@ const setupWebSocket = ()=>{
            };
           //  coin으ㅣ 가격과 24시간 거래대금 오류방지
            if (newTicker.tradePrice > 1 && newTicker.accTradePrice24h > 0) {
+
+            // 동일한 index찾아서  updateData에서 교체해주기
             setTickerData((prevData) => {
               const existingIndex = prevData.findIndex((ticker) => ticker.code === newTicker.code);
               if (existingIndex !== -1) {
@@ -163,10 +165,13 @@ const setupWebSocket = ()=>{
         change: coin.change,                              // 변화 상태
         code: coin.market,        
       }))
+
+      // 거래대금, 현재가격 0 1 이상인것 (이상한값 제외 )
+      const validCoin=  initialData.filter((coin)=> coin.tradePrice > 1 && coin.accTradePrice24h > 0)
       console.log("initialData",initialData)
      
       // 초기 데이터를 상태에 반영
-      setTickerData(initialData);
+      setTickerData(validCoin);
       console.log("처음에 화면 렌더링 쉽게해줌 사용자 경험 향상시켜줌")
     } catch (error) {
       console.error("Error fetching initial coin data:", error);

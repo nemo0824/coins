@@ -5,7 +5,7 @@ import Router from './Router.tsx';
 import SideBar from './components/SideBar.tsx';
 function App() {
   return (
-  <div className='bg-[rgb(10,10,11)] w-screen h-screen overflow-x-hidden '>
+  <div className='bg-[rgb(10,10,11)] w-screen h-screen overflow-x-hidden pt-[64px]'>
     <Header></Header>
     {/* <section className='flex'>
     <SideBar></SideBar> */}
