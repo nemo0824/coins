@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState, useCallback } from 'react'
 import SearchBar from "./SearchBar"
 // import { RxHamburgerMenu } from "react-icons/rx";
 // import IconButton from './elements/IconButton';
@@ -15,7 +15,8 @@ export const Header = () => {
   // store 에서 logged 상태 사용
   const {isLogged, setIsLogged} = store.useUserLogin()
 
-  const [isScroll, setIsScroll] = useState(false)
+  // const [isScrolled, setIsScrolled] = useState(false)
+
   // 로그아웃 버튼 
   const handleLogout = ()=>{
     localStorage.removeItem('accessToken')
@@ -36,31 +37,37 @@ export const Header = () => {
     navigate('/')
   }
 
-  const handleScroll = ()=>{
-    if(window.scrollY > 0){
-      setIsScroll(true)
-    }else{
-      setIsScroll(false)
-    }
-  }
-
+ 
+  // const handleScroll = useCallback(() => {
+  //   const scrollValue = window.scrollY;
+  //   console.log("Scroll value:", scrollValue);
+  //   setIsScrolled(scrollValue !== 0);
+  // }, []);
   useEffect(() => {
     const accessToken = localStorage.getItem('accessToken');
     setIsLogged(!!accessToken); 
     console.log("useEffect에서 accessToken",!!accessToken)
 
-    window.addEventListener("scroll", handleScroll)
-    return ()=>{
-      window.removeEventListener('scroll', handleScroll)
-    }
   }, []);
- 
+
+  // useEffect(() => {
+  //   console.log("Adding scroll event listener");
+  //   window.addEventListener("scroll", handleScroll);
+
+  //   return () => {
+  //     console.log("Removing scroll event listener");
+  //     window.removeEventListener("scroll", handleScroll);
+  //   };
+  // }, [handleScroll]); // 빈 배열로 설정하여 이벤트 리스너 추가
+
+  // useEffect(() => {
+  //   console.log("isScrolled 상태 변경:", isScrolled);
+  // }, [isScrolled]); // 상태가 변경될 때마다 호출
 
   return (
  
-    <header className={`bg-neutral-700 fixed top-0 left-0 z-50 flex flex-rox justify-between items-center min-w-[600px] h-[64px] w-full px-3 gap-1`} >
+    <header  className={cn("bg-neutral-700 sticky top-0 left-0 z-50 flex flex-rox justify-between items-center min-w-[600px] h-[64px] w-full px-3 gap-1",)} >
       <article className='flex flex-row items-center'>
-        {/* <IconButton icon={<RxHamburgerMenu size={26}></RxHamburgerMenu>} ></IconButton> */}
         <Logo handleRoot={handleRoot}/>
       </article>
       <article>

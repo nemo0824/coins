@@ -29,7 +29,7 @@ const Comment = ({postId}:{postId:string}) => {
           content: newComment
         }
       )
-      console.log(response.data)
+      // console.log(response.data)
       getComment();
       setNewComment('')
       
@@ -46,14 +46,14 @@ const Comment = ({postId}:{postId:string}) => {
     try{
         const response = await axios.get(`http://localhost:8080/api/comments/${postId}`);
         setComments(response.data)
-        console.log(response.data, "조회")
+        // console.log(response.data, "조회")
     }catch(error){
         console.error('댓글 조회 오류',error)
     }
   } 
  // 댓글 삭제ㅌ
  const handleDelete = async (commentId: string) => {
-  console.log(commentId)
+  // console.log(commentId)
   try {
     await axios.delete(`http://localhost:8080/api/comments/${commentId}`);
     alert("삭제 성공");

@@ -11,7 +11,7 @@ const SearchBar = () => {
         <div className='flex flex-row items-center h-[35px] min-w-[400px] rounded-2xl bg-[rgba(0,0,0,0.14)] gap-2 px-[16px]' >
           <input 
             type='text' 
-            className='bg-transparent w-full h-full relative' 
+            className='bg-transparent w-full h-full relative text-white py-1' 
             placeholder='검색하세요'
             onChange={(e)=>{setSearchTerm(e.currentTarget.value)}}
             />

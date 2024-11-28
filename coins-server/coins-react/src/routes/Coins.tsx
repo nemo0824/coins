@@ -136,7 +136,7 @@ const setupWebSocket = ()=>{
       if (coinCodes.length > 0) {
 
         await getCoinInitial();
-        console.log("초기값 호출됐나?")
+       
 
         setupWebSocket(); // WebSocket 설정 함수 호출
       }
@@ -155,7 +155,7 @@ const setupWebSocket = ()=>{
   const getCoinInitial = async() =>{  
     try {
       const response = await axios.get(`https://api.bithumb.com/v1/ticker?markets=${coinCodes.join(',')}`);
-      console.log("data",response.data)
+      // console.log("data",response.data)
    
       const initialData : TickerPrice[] = response.data.map((coin:CoinResponse)=>({
         tradePrice: coin.trade_price,             // 현재가
@@ -168,11 +168,11 @@ const setupWebSocket = ()=>{
 
       // 거래대금, 현재가격 0 1 이상인것 (이상한값 제외 )
       const validCoin=  initialData.filter((coin)=> coin.tradePrice > 1 && coin.accTradePrice24h > 0)
-      console.log("initialData",initialData)
+      // console.log("initialData",initialData)
      
       // 초기 데이터를 상태에 반영
       setTickerData(validCoin);
-      console.log("처음에 화면 렌더링 쉽게해줌 사용자 경험 향상시켜줌")
+      // console.log("처음에 화면 렌더링 쉽게해줌 사용자 경험 향상시켜줌")
     } catch (error) {
       console.error("Error fetching initial coin data:", error);
     }
@@ -241,7 +241,7 @@ const setupWebSocket = ()=>{
   
 
   return (
-    <div className='flex justify-center items-center bg-[#0A0A0B] w-full'>
+    <div className='flex justify-center items-center bg-[#0A0A0B] w-full '>
      
        <table className='min-w-[600px] max-w-[650px] table-fixed  mt-3'>
         <thead>

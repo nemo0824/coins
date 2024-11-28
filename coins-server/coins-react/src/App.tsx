@@ -1,11 +1,12 @@
+import { useEffect, useState } from 'react';
 import './App.css';
 import Header from './components/Header.tsx';
-import Login from './routes/Login.tsx';
 import Router from './Router.tsx';
-import SideBar from './components/SideBar.tsx';
+
 function App() {
+  
   return (
-  <div className='bg-[rgb(10,10,11)] w-screen h-screen overflow-x-hidden pt-[64px]'>
+  <div className='bg-[rgb(10,10,11)] w-screen h-screen overflow-auto'>
     <Header></Header>
     {/* <section className='flex'>
     <SideBar></SideBar> */}

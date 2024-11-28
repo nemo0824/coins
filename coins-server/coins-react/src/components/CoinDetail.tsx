@@ -6,14 +6,14 @@ import { IoBarChart } from "react-icons/io5";
 import { LuClipboardEdit } from "react-icons/lu";
 const CoinDetail = () => {
   const location = useLocation()
-  console.log("location? ????", location)
+  // console.log("location? ????", location)
   const {displayName} = location.state
-  console.log("displayname", displayName)
+  // console.log("displayname", displayName)
   const {id} = useParams()
  
   
   return (
-    <div>
+    <div className='w-full h-full'>
       <div className='p-6'>
         <div className='mb-4'></div>
         <h1 className='text-slate-100 text-[24px] font-bold flex items-center gap-3' ><IoBarChart></IoBarChart>{displayName} 차트</h1>

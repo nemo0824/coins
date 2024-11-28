@@ -79,7 +79,7 @@ export function CoinChart() {
 
     
   }
-  console.log(chartData)
+  // console.log(chartData)
 
   
   const {id} = useParams()
